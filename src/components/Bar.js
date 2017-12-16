@@ -8,7 +8,7 @@ class Bar extends Component{
 	render() {
 		return (
 			<Navbar>
-				<Nav>	
+				<Nav className='bg-light'>	
 					<NavItem>
 						<NavLink exact to='/' activeStyle={{fontWeight: 'bold', color: 'red'}}>Home</NavLink>
 					</NavItem>
