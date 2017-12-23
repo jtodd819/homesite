@@ -1,0 +1,7 @@
+.mailForm .has-error{
+	color:red;
+}
+
+.mailForm .has-success{
+	color:green;
+}
