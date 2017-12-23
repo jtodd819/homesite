@@ -1,11 +1,11 @@
-.navbar-nav {
+.bar .navbar-nav {
     float:none;
     margin:0 auto;
     display: block;
     text-align: center;
 }
 
-.navbar-nav > li {
+.bar .navbar-nav > li {
     display: inline-block;
 		padding: 1em;
     float:none;

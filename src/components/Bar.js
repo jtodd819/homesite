@@ -7,7 +7,7 @@ import '../style/Bar.css';
 class Bar extends Component{
 	render() {
 		return (
-			<Navbar>
+			<Navbar className='bar'>
 				<Nav className='bg-light'>	
 					<NavItem>
 						<NavLink exact to='/' activeStyle={{fontWeight: 'bold', color: 'red'}}>Home</NavLink>

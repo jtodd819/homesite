@@ -1,5 +1,7 @@
-div > a {
-	color: white;
+.home {
+	text-align: center;
 }
 
-
+.home a {
+	color: white;
+}

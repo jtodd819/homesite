@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './components/App';
 import { HashRouter } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
+import 'font-awesome/css/font-awesome.min.css'
 
 ReactDOM.render((<HashRouter><App /></HashRouter>), document.getElementById('root'));
 registerServiceWorker();
