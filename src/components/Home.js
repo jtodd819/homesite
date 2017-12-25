@@ -17,8 +17,8 @@ class Home extends Component{
 					<Image src={me} responsive thumbnail/>
 				</div>
 				<div className='alert-info text-white' style={{width: 300, height: 'auto', margin:'auto'}}>
-					<a href='https://github.com/jtodd819'>Github: <i className='fa fa-github'/>  </a>
-					<a href='mailto:toddjam@oregonstate.edu'>Email: <i className='fa-envelope'/></a>
+					<a href='https://github.com/jtodd819'><i className='fa fa-github'/>  </a>
+					<a href='mailto:me@james-todd.net'><i className='fa-envelope'/></a>
 				</div>
 			</div>
 		);
