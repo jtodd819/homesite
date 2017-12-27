@@ -11,7 +11,8 @@ class MailForm extends Component{
 		this.state = {address:'', subject:'', message:''};
 		this.handleTextInput = this.handleTextInput.bind(this);
 		this.handleSend = this.handleSend.bind(this);
-		this.getValidationState = this.getValidationState.bind(this);
+		this.getLengthValidation = this.getLengthValidation.bind(this);
+		this.getAddressValidation = this.getAddressValidation.bind(this);
 	}
 
 	//update state of each input based on user input
@@ -43,9 +44,17 @@ class MailForm extends Component{
 	}
 	
 	//Return the validity of an input field based on its length
-	getValidationState(length){
+	getLengthValidation(length){
 		console.log(length);
 		if(length > 0){
+			return 'success';
+		}
+		return 'error';
+	}
+
+	//validate email address based on regex pattern
+	getAddressValidation(address){
+		if(/[^\s@]+@[^\s@]+\.[^\s@]+/.test(address)){
 			return 'success';
 		}
 		return 'error';
@@ -55,17 +64,17 @@ class MailForm extends Component{
 	render(){
 		return(
 			<form className='mailForm' onSubmit={this.handleSend}>
-				<FormGroup validationState={this.getValidationState(this.state.address.length)}>
+				<FormGroup validationState={this.getAddressValidation(this.state.address)}>
 					<ControlLabel>Address:</ControlLabel><br/>
 					<FormControl name='address' type='text' value={this.state.address} 
 					onChange={this.handleTextInput}/><br/>
 				</FormGroup>
-				<FormGroup validationState={this.getValidationState(this.state.subject.length)}>
+				<FormGroup validationState={this.getLengthValidation(this.state.subject.length)}>
 					<ControlLabel>Subject:</ControlLabel><br/>
 					<FormControl name='subject' type='text' value={this.state.subject} 
 					onChange={this.handleTextInput}/><br/>
 				</FormGroup>
-				<FormGroup validationState={this.getValidationState(this.state.message.length)}>
+				<FormGroup validationState={this.getLengthValidation(this.state.message.length)}>
 					<ControlLabel>Message:</ControlLabel><br/>
 					<FormControl name='message' type='text' value={this.state.message}
 					componentClass='textarea' onChange={this.handleTextInput}/><br/>
