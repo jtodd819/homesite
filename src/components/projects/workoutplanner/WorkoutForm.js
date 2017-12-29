@@ -5,8 +5,7 @@ import { Alert } from 'react-bootstrap';
 class WorkoutForm extends Component{
 	constructor(props){
 		super(props);
-		//One rep max used for weighted exercises, maximum rep count used for unweighted exercises
-		this.state = {myName: '', isWeighted: false, weightedORM: 0, maxRepCount: 0, submitErr: false};
+		this.state = {name: '', weighted: false, max: 0, submitErr: false};
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
@@ -17,16 +16,9 @@ class WorkoutForm extends Component{
 	}
 	//submits a workout to be made as a weighted or unweighted row if it is of the proper form
 	handleSubmit(e) {
-		if(this.state.myName !== ''){
-			if((this.state.isWeighted === false) && (this.state.maxRepCount > 0)){
-				this.setState({submitErr: false});
-				this.props.addUnweighted(this.state.myName, this.state.maxRepCount); 
-			}else if((this.state.isWeighted === true) && (this.state.weightedORM > 0)){
-				this.setState({submitErr: false});
-				this.props.addWeighted(this.state.myName, this.state.weightedORM);
-			}else{
-				this.setState({submitErr: true});
-			}
+		if(this.state.name !== '' && this.state.max > 0){
+			this.setState({submitErr: false});
+			this.props.add(this.state.name, this.state.max, this.state.weighted); 
 		}else{
 			this.setState({submitErr: true});
 		}
@@ -39,23 +31,23 @@ class WorkoutForm extends Component{
 				<br/>
 				<form onSubmit={this.handleSubmit}>    
 					Exercise Name:
-					<input type="text" name="myName" value={this.state.name} onChange={this.handleChange}/>
+					<input type="text" name="name" value={this.state.name} onChange={this.handleChange}/>
 					<br/>
-					Weighted Exercise:
-					<input type="checkbox" name="isWeighted" checked={this.state.isWeighted} onChange={this.handleChange}/>
+					Does the exercise use weights?
+					<input type="checkbox" name="weighted" checked={this.state.weighted} onChange={this.handleChange}/>
 					<br/>
-					{this.state.isWeighted === true && 
+					{this.state.weighted && 
 						<div>
 							One Rep Max (lbs):
-							<input type="number" name="weightedORM" value={this.state.weightedORM} 
+							<input type="number" name="max" value={this.state.max} 
 							onChange={this.handleChange}/>
 							<br/>
 						</div>
 					}
-					{this.state.isWeighted === false &&
+					{!this.state.weighted &&
 						<div>
 							Maximum Rep Count:
-							<input type="number" name="maxRepCount" value={this.state.unweightedRepMax} 
+							<input type="number" name="max" value={this.state.max} 
 							onChange={this.handleChange}/>
 							<br/>
 						</div>

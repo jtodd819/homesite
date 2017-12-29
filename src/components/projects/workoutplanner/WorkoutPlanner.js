@@ -2,68 +2,46 @@
 
 import React, { Component } from "react";
 import { PageHeader, Table, Well, Button} from "react-bootstrap";
-import Weighted from './Weighted';
-import Weightless from './Weightless';
 import WorkoutForm from './WorkoutForm';
+import Exercise from './Exercise';
 
 //App containing form and workouts table
 class WorkoutPlanner extends Component{
 	constructor(props){
 		super(props);
-		this.addUW = this.addUW.bind(this);
-		this.addW = this.addW.bind(this);
-		this.editW = this.editW.bind(this);
-		this.editUW = this.editUW.bind(this);
-		this.deleteWorkout = this.deleteWorkout.bind(this);
-		this.changeWorkout = this.changeWorkout.bind(this);
+		this.add = this.add.bind(this);
+		this.edit = this.edit.bind(this);
+		this.delete = this.delete.bind(this);
+		this.changeExercise = this.changeExercise.bind(this);
 		this.changeEditValue = this.changeEditValue.bind(this);
 		this.cancelEdit = this.cancelEdit.bind(this);
 		this.state = {rows: [], editing: false, editName:"", editIndex:0, editValue:0, editType:0};
 	}
-	//add a weighted workout to the table
-	addW(myName, myORM){
+	//add an exericse to the table
+	add(name, max, weighted){
 		let nextState = this.state;
-		nextState.rows.push(<Weighted key={this.state.rows.length} index={this.state.rows.length} 
-		editRow={this.editW} deleteRow={this.deleteWorkout} name={myName} ORM={myORM}/>);
-		this.setState(nextState);
-	}
-	//add a weightless workout to the table
-	addUW(myName, myMaxCount){
-		let nextState = this.state;
-		nextState.rows.push(<Weightless key={this.state.rows.length} index={this.state.rows.length} editRow={this.editUW}
-		deleteRow={this.deleteWorkout} name={myName} maxCount={myMaxCount} />);
+		nextState.rows.push(<Exercise key={this.state.rows.length} index={this.state.rows.length} 
+		editRow={this.edit} deleteRow={this.delete} name={name} max={max} weighted={weighted}/>);
 		this.setState(nextState);
 	}
 
-	//Make the editing form visible for editing a weighted workout
-	editW(name, index, ORM){
-		this.setState({editing: true, editName: name, editIndex:index, editType:0, editValue: ORM});
+	//Make the editing form visible for editing an exercise
+	edit(name, index, max, weighted){
+		this.setState({editing: true, editName: name, editIndex: index, editValue: max, editType: weighted});
 	}
 
-	//Make the editing form visible for editing a Weightless workout
-	editUW(name, index, maxRepCount){
-		this.setState({editing: true, editName: name, editIndex:index, editType:1, editValue: maxRepCount});
-	}
-
-	//change a workout after submitting changes from the edit form
-	changeWorkout(e){
+	//change an exercise after submitting changes from the edit form
+	changeExercise(e){
 		let nextState = this.state;
-		if(nextState.editType === 0){
-			nextState.rows.splice(nextState.editIndex, 1, <Weighted key={nextState.editIndex} 
-			index={nextState.editIndex} editRow={this.editW} deleteRow={this.deleteWorkout} 
-			name={nextState.editName} ORM={nextState.editValue} />);
-			this.setState({rows: nextState.rows, editing: false});
-		}else if(nextState.editType === 1){
-			nextState.rows.splice(nextState.editIndex, 1, <Weightless key={nextState.editIndex} 
-			index={nextState.editIndex} editRow={this.editUW} deleteRow={this.deleteWorkout} 
-			name={nextState.editName} maxCount={nextState.editValue} />);
-			this.setState({rows: nextState.rows, editing: false});
-		}
+		nextState.rows.splice(nextState.editIndex, 1, <Exercise key={nextState.editIndex} index={nextState.editIndex}
+		editRow={this.edit} deleteRow={this.delete} name={nextState.editName} max={nextState.editValue}
+		weighted={nextState.editType}/>);
+		this.setState({rows: nextState.rows, editing: false});
 		e.preventDefault();
 	}
 
-	//remove a workout at a given row index
-	deleteWorkout(index){
+	//remove an exercise at a given row index
+	delete(index){
 		let nextState = this.state;
 		nextState.rows.splice(index,1);
 		this.setState(nextState);
@@ -78,12 +56,13 @@ class WorkoutPlanner extends Component{
 	cancelEdit(){
 		this.setState({editing: false});
 	}
+
 	//returns a form for submitting workouts and a table of those submitted
 	render(){
 		return(
 			<div>
 				<PageHeader>Workout Planner<small> by James Todd</small></PageHeader> 
-				<WorkoutForm addUnweighted={this.addUW} addWeighted={this.addW}/>
+				<WorkoutForm add={this.add}/>
 				<Table condensed hover>
 					<thead>
 					{this.state.rows.length > 0 &&
@@ -106,7 +85,7 @@ class WorkoutPlanner extends Component{
 				</Table> 
 				{this.state.editing === true &&
 					<div>
-						<form onSubmit={this.changeWorkout}>
+						<form onSubmit={this.changeExercise}>
 							<input type="number" value={this.state.editValue} onChange={this.changeEditValue}></input>
 							<input type="submit" value="Change"></input>
 							<Button bsStyle="danger" onClick={this.cancelEdit}>Cancel</Button>
