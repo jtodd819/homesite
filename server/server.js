@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const mongoose = require('mongoose');
 const config = JSON.parse(fs.readFileSync('server/config.json'));
 
 
@@ -18,6 +19,49 @@ app.set('port', process.env.PORT || 3001);
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client'));
 }
+
+//setup mongodb mongoose connection
+const uriString = `mongodb://webdb:${config.mPW}@website-shard-00-00-ybzlj.mongodb.net:27017,website-shard-00-01-ybzlj.mongodb.net:27017,website-shard-00-02-ybzlj.mongodb.net:27017/workouts?ssl=true&replicaSet=website-shard-0&authSource=admin`
+
+mongoose.connect(uriString, (err, res) => {
+	if(err){
+		console.log(err);
+	}else{
+		console.log("Connected to DB");
+	}
+});
+
+//create schema for exercises
+const exerciseSchema = new mongoose.Schema({
+	index: { type: Number, min: 0 },
+	name: String,
+	max: { type: Number, min: 1 },
+	weighted: Boolean
+});
+
+const Exercise = mongoose.model('Exercise', exerciseSchema);
+
+//route for adding exercises to the database 
+app.post('/add', (req, res) => {
+	Exercise.create({ index: req.body.index, name: req.body.name, max: req.body.max, weighted: req.body.weighted }, (err, res) => {
+		if(err){
+			console.log(err);
+		}else{
+			console.log(`${res} exercise added.`);
+		}
+	});
+});
+
+//route for retreiving exercises from the database
+app.get('/getExercises', (req, res) => {
+	Exercise.find({}).exec((err, exercises) => {
+		if(err){
+			console.log(err);
+		}else{
+			res.send(exercises);
+		}
+	});
+});
 
 //setup nodemailer transport
 let transporter = nodemailer.createTransport({

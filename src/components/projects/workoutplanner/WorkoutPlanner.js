@@ -17,9 +17,31 @@ class WorkoutPlanner extends Component{
 		this.cancelEdit = this.cancelEdit.bind(this);
 		this.state = {rows: [], editing: false, editName:"", editIndex:0, editValue:0, editType:0};
 	}
+
+	//Get exercises from database when output rendered to dom
+	componentDidMount(){
+		fetch('/getExercises', { method: 'GET' }).then((response) => {
+				console.log(response.json());
+			});
+	}
+
 	//add an exericse to the table
 	add(name, max, weighted){
 		let nextState = this.state;
+		//add to database
+		fetch('/add', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				index: this.state.rows.length,
+				name: name,
+				max: max,
+				weighted: weighted
+			}),
+		}); 
 		nextState.rows.push(<Exercise key={this.state.rows.length} index={this.state.rows.length} 
 		editRow={this.edit} deleteRow={this.delete} name={name} max={max} weighted={weighted}/>);
 		this.setState(nextState);

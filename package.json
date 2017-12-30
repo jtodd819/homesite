@@ -9,6 +9,8 @@
     "express": "^4.16.2",
     "font-awesome": "^4.7.0",
     "fs": "0.0.1-security",
+    "mongodb": "^3.0.1",
+    "mongoose": "^5.0.0-rc0",
     "nodemailer": "^4.4.1",
     "path": "^0.12.7",
     "react": "^16.2.0",
