@@ -27,7 +27,7 @@ mongoose.connect(uriString, (err, res) => {
 	if(err){
 		console.log(err);
 	}else{
-		console.log("Connected to DB");
+		console.log("Connected to database");
 	}
 });
 
@@ -43,11 +43,12 @@ const Exercise = mongoose.model('Exercise', exerciseSchema);
 
 //route for adding exercises to the database 
 app.post('/add', (req, res) => {
-	Exercise.create({ index: req.body.index, name: req.body.name, max: req.body.max, weighted: req.body.weighted }, (err, res) => {
+	Exercise.create({ index: req.body.index, name: req.body.name, max: req.body.max, weighted: req.body.weighted }, 
+	(err, exercise) => {
 		if(err){
 			console.log(err);
 		}else{
-			console.log(`${res} exercise added.`);
+			res.send(exercise);
 		}
 	});
 });

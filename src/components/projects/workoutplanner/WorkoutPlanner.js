@@ -26,10 +26,10 @@ class WorkoutPlanner extends Component{
 
 	//get the Exercises from the database and change the view accordingly
 	getExercises(){
-		let newRows = [];
 		fetch('/getExercises', { method: 'GET' }).then( response => {
 			return response.json();
 		}).then( data => {
+			let newRows = [];
 			for(const exercise of data){
 				newRows.push(<Exercise key={exercise.index} index={exercise.index} 
 				editRow={this.edit} deleteRow={this.delete} name={exercise.name} max={exercise.max} weighted={exercise.weighted}/>);
@@ -53,7 +53,12 @@ class WorkoutPlanner extends Component{
 				max: max,
 				weighted: weighted
 			}),
-		}).then(this.getExercises()); 
+		}).then( response => {
+			return response.json();
+		}).then(data => {
+			console.log(data);
+			this.getExercises();
+		});
 	}
 
 	//Make the editing form visible for editing an exercise
