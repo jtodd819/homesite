@@ -52,6 +52,26 @@ app.post('/add', (req, res) => {
 	});
 });
 
+//route for changing exercise in the database
+
+//route for deleting exercises from the database
+app.post('/delete', (req, res) => {
+	Exercise.remove({ index: req.body.index }, err => {
+		if(err){
+			console.log(err);
+		}
+	});
+});
+
+//route for changing exercises in the database
+app.post('/change', (req, res) => {
+	Exercise.updateOne({ index: req.body.index }, { name: req.body.name, max: req.body.max, weighted: req.body.weighted }, err => {
+		if(err){
+			console.log(err);
+		}
+	});
+});
+
 //route for retreiving exercises from the database
 app.get('/getExercises', (req, res) => {
 	Exercise.find({}).exec((err, exercises) => {

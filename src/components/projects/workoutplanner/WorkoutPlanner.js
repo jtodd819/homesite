@@ -1,7 +1,7 @@
 /*James Todd - 12/28/2017 - A single page ReactJS workout planner application using react-bootstrap for styling*/
 
 import React, { Component } from "react";
-import { PageHeader, Table, Well, Button} from "react-bootstrap";
+import { PageHeader, Table, Well, Button, Alert} from "react-bootstrap";
 import WorkoutForm from './WorkoutForm';
 import Exercise from './Exercise';
 
@@ -12,22 +12,34 @@ class WorkoutPlanner extends Component{
 		this.add = this.add.bind(this);
 		this.edit = this.edit.bind(this);
 		this.delete = this.delete.bind(this);
+		this.getExercises = this.getExercises.bind(this);
 		this.changeExercise = this.changeExercise.bind(this);
-		this.changeEditValue = this.changeEditValue.bind(this);
+		this.changeEdit = this.changeEdit.bind(this);
 		this.cancelEdit = this.cancelEdit.bind(this);
-		this.state = {rows: [], editing: false, editName:"", editIndex:0, editValue:0, editType:0};
+		this.state = {rows: [], editing: false, editName: '', editIndex:0, editMax:0, editWeighted: false, editSubmitErr: false};
 	}
 
-	//Get exercises from database when output rendered to dom
+	//Get exercises from database when output rendered to dom 
 	componentDidMount(){
-		fetch('/getExercises', { method: 'GET' }).then((response) => {
-				console.log(response.json());
-			});
+		this.getExercises();
+	}
+
+	//get the Exercises from the database and change the view accordingly
+	getExercises(){
+		let newRows = [];
+		fetch('/getExercises', { method: 'GET' }).then( response => {
+			return response.json();
+		}).then( data => {
+			for(const exercise of data){
+				newRows.push(<Exercise key={exercise.index} index={exercise.index} 
+				editRow={this.edit} deleteRow={this.delete} name={exercise.name} max={exercise.max} weighted={exercise.weighted}/>);
+			}
+			this.setState({rows: newRows});
+		});
 	}
 
 	//add an exericse to the table
 	add(name, max, weighted){
-		let nextState = this.state;
 		//add to database
 		fetch('/add', {
 			method: 'POST',
@@ -41,37 +53,61 @@ class WorkoutPlanner extends Component{
 				max: max,
 				weighted: weighted
 			}),
-		}); 
-		nextState.rows.push(<Exercise key={this.state.rows.length} index={this.state.rows.length} 
-		editRow={this.edit} deleteRow={this.delete} name={name} max={max} weighted={weighted}/>);
-		this.setState(nextState);
+		}).then(this.getExercises()); 
 	}
 
 	//Make the editing form visible for editing an exercise
 	edit(name, index, max, weighted){
-		this.setState({editing: true, editName: name, editIndex: index, editValue: max, editType: weighted});
+		this.setState({editing: true, editName: name, editIndex: index, editMax: max, editWeighted: weighted});
 	}
 
 	//change an exercise after submitting changes from the edit form
 	changeExercise(e){
-		let nextState = this.state;
-		nextState.rows.splice(nextState.editIndex, 1, <Exercise key={nextState.editIndex} index={nextState.editIndex}
-		editRow={this.edit} deleteRow={this.delete} name={nextState.editName} max={nextState.editValue}
-		weighted={nextState.editType}/>);
-		this.setState({rows: nextState.rows, editing: false});
+		//make sure a valid name and max value submitted
+		if(this.state.editName === '' || this.state.editMax < 1){
+			this.setState({editSubmitErr: true});
+		}else{
+			//change exercise in the database
+			fetch('/change', {
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					index: this.state.editIndex,
+					name: this.state.editName,
+					max: this.state.editMax, 
+					weighted: this.state.editWeighted
+				}),
+			}).then(this.getExercises());
+		}
 		e.preventDefault();
 	}
 
 	//remove an exercise at a given row index
 	delete(index){
-		let nextState = this.state;
-		nextState.rows.splice(index,1);
-		this.setState(nextState);
+		//remove editing form if the currently edited exericse is deleted
+		if(this.state.editing && index === this.state.editIndex){
+			this.setState({editing: false});
+		}
+		//remove from the database
+		fetch('/delete', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				index: index,
+			}),
+		}).then(this.getExercises());
 	}
 
 	//change the value of the state's edit value when editing data in edit form
-	changeEditValue(e){
-		this.setState({editValue: e.target.value});
+	changeEdit(e){
+		const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+		this.setState({[e.target.name] : value });
 	}
 
 	//cancel editing used when hitting the cancel button
@@ -107,11 +143,35 @@ class WorkoutPlanner extends Component{
 				</Table> 
 				{this.state.editing === true &&
 					<div>
-						<form onSubmit={this.changeExercise}>
-							<input type="number" value={this.state.editValue} onChange={this.changeEditValue}></input>
-							<input type="submit" value="Change"></input>
-							<Button bsStyle="danger" onClick={this.cancelEdit}>Cancel</Button>
+						<form onSubmit={this.changeExercise}>    
+							Exercise Name:
+							<input type="text" name="editName" value={this.state.editName} onChange={this.changeEdit}/>
+							<br/>
+							Does the exercise use weights?
+							<input type="checkbox" name="editWeighted" checked={this.state.editWeighted} onChange={this.changeEdit}/>
+							<br/>
+							{this.state.editWeighted && 
+								<div>
+									One Rep Max (lbs):
+									<input type="number" name="editMax" value={this.state.editMax} 
+									onChange={this.changeEdit}/>
+									<br/>
+								</div>
+							}
+							{!this.state.editWeighted &&
+								<div>
+									Maximum Rep Count:
+									<input type="number" name="editMax" value={this.state.editMax} onChange={this.handleChange}/>
+									<br/>
+								</div>
+							}
+							<input type="submit" value="Change"/>
+							<br/>
+							{this.state.editSubmitErr === true && <Alert bsStyle="warning">Error: workout submitted incorrectly. Please submit
+							workout with a name and max value > 0. </Alert>
+							}
 						</form>
+						<Button bsStyle="danger" onClick={this.cancelEdit}>Cancel</Button>
 					</div>
 				}
 				<Well>For weighted exercises, workout plan calculated at 10 intervals starting at 10% to 100% of

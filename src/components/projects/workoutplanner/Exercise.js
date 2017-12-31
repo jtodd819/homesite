@@ -33,7 +33,7 @@ class Exercise extends Component{
 					<td>1-3 reps x {5 * Math.round(Math.round(.8 * oneRepMax) / 5)}lbs</td>
 					<td>1 rep x {5 * Math.round(Math.round(.9 * oneRepMax) / 5)}lbs</td>
 					<td>1 rep or PR x {5 * Math.round(oneRepMax / 5)}lbs</td>
-					<td><Button onClick={this.rowEdit}>Edit One Rep Max</Button></td>
+					<td><Button onClick={this.rowEdit}>Edit</Button></td>
 					<td><Button bsStyle="danger" onClick={this.rowDelete}>Delete</Button></td>
 				</tr>
 			);
@@ -48,7 +48,7 @@ class Exercise extends Component{
 					<td>{set} reps</td>
 					<td>{set} reps</td>
 					<td>{set} reps</td>
-					<td><Button onClick={this.rowEdit}>Edit Max Reps</Button></td>
+					<td><Button onClick={this.rowEdit}>Edit</Button></td>
 					<td><Button onClick={this.rowDelete} bsStyle="danger">Delete</Button></td>
 				</tr>
 			);
