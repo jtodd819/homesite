@@ -110,11 +110,11 @@ app.post('/sendmail', (req,res) => {
 			accessToken: config.access,
 			expires: 3500
 		}
-	}, (err,res) => {
+	}, (err,response) => {
 		if(err){
 			console.log(err);
 		}else{
-			console.log('message sent');
+			res.send('Message sent!');
 		}
 	});
 });
