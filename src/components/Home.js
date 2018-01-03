@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import { Image} from 'react-bootstrap';
 import '../style/Home.css';
-import me from '../media/me.png';
+import me from '../media/pic.JPG';
 
 class Home extends Component{
 	render(){
 		return(
 			<div className='home'>
 				<h1>Welcome!</h1>
-				<p>My name is James Todd, and this is my personal website.<br/>
+				<p className='text-info'>My name is James Todd, and this is my personal website.<br/>
 				I am a software engineer specializing in full stack web development.<br/>
 				For samples of my work, visit the Projects tab. <br/>
 				To access my complete Resume, visit the Resume tab.<br/>
@@ -17,7 +17,7 @@ class Home extends Component{
 					<Image src={me} responsive thumbnail/>
 				</div>
 				<div className='alert-info text-white' style={{width: 300, height: 'auto', margin:'auto'}}>
-					<a href='https://github.com/jtodd819'><i className='fa fa-github'/>  </a>
+					<a href='https://github.com/jtodd819'><i className='fa fa-github'/></a>
 					<a href='mailto:me@james-todd.net'><i className='fa-envelope'/></a>
 				</div>
 			</div>

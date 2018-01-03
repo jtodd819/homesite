@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormControl, FormGroup, ControlLabel, Alert } from 'react-bootstrap';
+import { FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 import '../style/MailForm.css';
 
 //Form for Sending Mail to my Address
@@ -38,7 +38,7 @@ class MailForm extends Component{
 					subject: this.state.subject,
 					message: this.state.message,
 				}),
-			}).then(Alert('Message Sent!'));
+			}).then(alert('Message Sent!'));
 		}
 		event.preventDefault();
 	}

@@ -13,7 +13,7 @@ class Bar extends Component{
 						<NavLink exact to='/' activeStyle={{fontWeight: 'bold', color: 'red'}}>Home</NavLink>
 					</NavItem>
 					<NavItem>
-						<NavLink exact to='/projects' activeStyle={{fontWeight: 'bold', color: 'red'}}>Projects</NavLink>
+						<NavLink to='/projects' activeStyle={{fontWeight: 'bold', color: 'red'}}>Projects</NavLink>
 					</NavItem>
 					<NavItem>
 						<NavLink exact to='/resume' activeStyle={{fontWeight: 'bold', color: 'red'}}>Resume</NavLink>
