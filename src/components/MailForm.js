@@ -5,10 +5,10 @@ import '../style/MailForm.css';
 //Form for Sending Mail to my Address
 class MailForm extends Component{
 
-	//messages are composed of address,subject, and message
+	//messages are composed of address, subject, and message
 	constructor(props){
 		super(props);
-		this.state = {address:'', subject:'', message:''};
+		this.state = { address:'', subject:'', message:'' };
 		this.handleTextInput = this.handleTextInput.bind(this);
 		this.handleSend = this.handleSend.bind(this);
 		this.getLengthValidation = this.getLengthValidation.bind(this);
@@ -24,8 +24,9 @@ class MailForm extends Component{
 
 	//If the address subject and message are specified send mail using nodemail posted to the express sendmail route
 	handleSend(event){
-		if(this.state.address === '' || this.state.subject === '' || this.state.message === ''){
-			alert('Please include a valid address, subject, and message to send a contact email.');
+		//Display error alert if address not in correct form or subject/message left blank
+		if(!/[^\s@]+@[^\s@]+\.[^\s@]+/.test(this.state.address) || this.state.subject === '' || this.state.message === ''){
+			alert('Please ensure you have included a subject, message, and valid email address in the contact form to send an email.');
 		}else{
 			fetch('/sendmail', {
 				method: 'POST',
@@ -42,7 +43,7 @@ class MailForm extends Component{
 		}
 		event.preventDefault();
 	}
-	
+
 	//Return the validity of an input field based on its length
 	getLengthValidation(length){
 		console.log(length);
@@ -63,26 +64,30 @@ class MailForm extends Component{
 	//create form for submitting email
 	render(){
 		return(
-			<form className='mailForm' onSubmit={this.handleSend}>
-				<FormGroup validationState={this.getAddressValidation(this.state.address)}>
-					<ControlLabel>Address:</ControlLabel><br/>
-					<FormControl name='address' type='text' value={this.state.address} 
-					onChange={this.handleTextInput}/><br/>
-				</FormGroup>
-				<FormGroup validationState={this.getLengthValidation(this.state.subject.length)}>
-					<ControlLabel>Subject:</ControlLabel><br/>
-					<FormControl name='subject' type='text' value={this.state.subject} 
-					onChange={this.handleTextInput}/><br/>
-				</FormGroup>
-				<FormGroup validationState={this.getLengthValidation(this.state.message.length)}>
-					<ControlLabel>Message:</ControlLabel><br/>
-					<FormControl name='message' type='text' value={this.state.message}
-					componentClass='textarea' onChange={this.handleTextInput}/><br/>
-				</FormGroup>
-				<div style={{textAlign: 'center'}}>
-					<input type='submit' value='Send'/>
-				</div>
-			</form>
+			<div>
+				<p className='text-primary' style={{textAlign: 'center'}}>To send me an email, please submit a message 
+				with your email address and a subject in the form below.</p>
+				<form className='mailForm' onSubmit={this.handleSend}>
+					<FormGroup validationState={this.getAddressValidation(this.state.address)}>
+						<ControlLabel>Address:</ControlLabel><br/>
+						<FormControl name='address' type='text' value={this.state.address} 
+						onChange={this.handleTextInput}/><br/>
+					</FormGroup>
+					<FormGroup validationState={this.getLengthValidation(this.state.subject.length)}>
+						<ControlLabel>Subject:</ControlLabel><br/>
+						<FormControl name='subject' type='text' value={this.state.subject} 
+						onChange={this.handleTextInput}/><br/>
+					</FormGroup>
+					<FormGroup validationState={this.getLengthValidation(this.state.message.length)}>
+						<ControlLabel>Message:</ControlLabel><br/>
+						<FormControl name='message' type='text' value={this.state.message}
+						componentClass='textarea' onChange={this.handleTextInput}/><br/>
+					</FormGroup>
+					<div style={{textAlign: 'center'}}>
+						<input type='submit' value='Send'/>
+					</div>
+				</form>
+			</div>
 		);
 	}
 }

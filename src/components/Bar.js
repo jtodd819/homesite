@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
 import '../style/Bar.css';
 
 //Navbar with links to each page on the site
@@ -9,18 +9,18 @@ class Bar extends Component{
 		return (
 			<Navbar className='bar'>
 				<Nav className='bg-light'>	
-					<NavItem>
-						<NavLink exact to='/' activeStyle={{fontWeight: 'bold', color: 'red'}}>Home</NavLink>
-					</NavItem>
-					<NavItem>
-						<NavLink to='/projects' activeStyle={{fontWeight: 'bold', color: 'red'}}>Projects</NavLink>
-					</NavItem>
-					<NavItem>
-						<NavLink exact to='/resume' activeStyle={{fontWeight: 'bold', color: 'red'}}>Resume</NavLink>
-					</NavItem>
-					<NavItem>
-						<NavLink exact to='/contact' activeStyle={{fontWeight: 'bold', color: 'red'}}>Contact</NavLink>
-					</NavItem>
+					<LinkContainer exact to='/' activeStyle={{fontWeight: 'bold', backgroundColor: '#073642'}}>
+						<NavItem>Home</NavItem>
+					</LinkContainer>
+					<LinkContainer to='/projects' activeStyle={{fontWeight: 'bold', backgroundColor: '#073642'}}>
+						<NavItem>Projects</NavItem>
+					</LinkContainer>
+					<LinkContainer exact to='/resume' activeStyle={{fontWeight: 'bold', backgroundColor: '#073642'}}>
+						<NavItem>Resume</NavItem>
+					</LinkContainer>
+					<LinkContainer exact to='/contact' activeStyle={{fontWeight: 'bold', backgroundColor: '#073642'}}>
+						<NavItem>Contact</NavItem>
+					</LinkContainer>
 				</Nav>
 			</Navbar>
 		);
