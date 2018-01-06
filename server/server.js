@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
-const config = JSON.parse(fs.readFileSync('server/config.json'));
+const config = JSON.parse(fs.readFileSync('/home/jake/apps/james-todd.net/server/config.json'));
 
 
 //setup express and body parser
@@ -16,9 +16,11 @@ app.use(bodyParser.json());
 app.set('port', process.env.PORT || 3001);
 
 //use a static build on production server
+/*
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client'));
+  app.use(express.static(path.join(__dirname, 'build')));
 }
+*/
 
 //setup mongodb mongoose connection
 const uriString = `mongodb://webdb:${config.mPW}@website-shard-00-00-ybzlj.mongodb.net:27017,website-shard-00-01-ybzlj.mongodb.net:27017,website-shard-00-02-ybzlj.mongodb.net:27017/workouts?ssl=true&replicaSet=website-shard-0&authSource=admin`
@@ -27,12 +29,13 @@ mongoose.connect(uriString, (err, res) => {
 	if(err){
 		console.log(err);
 	}else{
-		console.log("Connected to database");
+		console.log('Connected to database');
 	}
 });
 
 //create schema for exercises
 const exerciseSchema = new mongoose.Schema({
+	user: { type: Number, min: 0 },
 	index: { type: Number, min: 0 },
 	name: String,
 	max: { type: Number, min: 1 },
@@ -41,9 +44,17 @@ const exerciseSchema = new mongoose.Schema({
 
 const Exercise = mongoose.model('Exercise', exerciseSchema);
 
+/*
+//serve static index.html in production
+app.get('/*', function (req, res) {
+	  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+*/
+
 //route for adding exercises to the database 
 app.post('/add', (req, res) => {
-	Exercise.create({ index: req.body.index, name: req.body.name, max: req.body.max, weighted: req.body.weighted }, 
+	Exercise.create({ user: req.body.user, index: req.body.index, name: req.body.name, 
+	max: req.body.max, weighted: req.body.weighted }, 
 	(err, exercise) => {
 		if(err){
 			console.log(err);
@@ -57,7 +68,7 @@ app.post('/add', (req, res) => {
 
 //route for deleting exercises from the database
 app.post('/delete', (req, res) => {
-	Exercise.remove({ index: req.body.index }, err => {
+	Exercise.remove({ user: req.body.user, index: req.body.index }, err => {
 		if(err){
 			console.log(err);
 		}
@@ -66,7 +77,8 @@ app.post('/delete', (req, res) => {
 
 //route for changing exercises in the database
 app.post('/change', (req, res) => {
-	Exercise.updateOne({ index: req.body.index }, { name: req.body.name, max: req.body.max, weighted: req.body.weighted }, err => {
+	Exercise.updateOne({ user: req.body.user, index: req.body.index }, 
+	{ name: req.body.name, max: req.body.max, weighted: req.body.weighted }, err => {
 		if(err){
 			console.log(err);
 		}
@@ -74,8 +86,8 @@ app.post('/change', (req, res) => {
 });
 
 //route for retreiving exercises from the database
-app.get('/getExercises', (req, res) => {
-	Exercise.find({}).exec((err, exercises) => {
+app.post('/getExercises', (req, res) => {
+	Exercise.find({ user: req.body.user }).exec((err, exercises) => {
 		if(err){
 			console.log(err);
 		}else{

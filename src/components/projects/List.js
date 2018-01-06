@@ -15,9 +15,10 @@ class List extends Component{
 				<Link to='/projects/workoutplanner'>Workout Planner </Link>
 				<a href='https://github.com/jtodd819/homesite/tree/master/src/components/projects/workoutplanner'> 
 				<i className='fa fa-github'/></a><br/>
-				<p className='text-primary'>A workout planner for calculating set and rep counts for inputted exercises <br/>
+				<p className='text-primary'>A workout planner for calculating set and rep counts for inputted exercises
 				based on selected one rep maximum weights or maximum rep counts if the exercise is weightless. <br/>
-				Backend saves, queries, edits, and deletes exercises on a MongoDB cluster using Mongoose ODM and Express. <br/>
+				Backend saves, queries, edits, and deletes exercises on a MongoDB cluster using Mongoose ODM and Express with
+				localStorage created users. <br/>
 				Front end components built with ReactJS with styling from React Bootstrap.</p><br/>
 				<div style={{width: 700, height: 'auto'}}>
 					<Image src={smallShellPic} responsive thumbnail/>

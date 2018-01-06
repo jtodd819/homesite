@@ -12,21 +12,45 @@ class WorkoutPlanner extends Component{
 		this.add = this.add.bind(this);
 		this.edit = this.edit.bind(this);
 		this.delete = this.delete.bind(this);
+		this.getUser = this.getUser.bind(this);
 		this.getExercises = this.getExercises.bind(this);
 		this.changeExercise = this.changeExercise.bind(this);
 		this.changeEdit = this.changeEdit.bind(this);
 		this.cancelEdit = this.cancelEdit.bind(this);
-		this.state = {rows: [], editing: false, editName: '', editIndex:0, editMax:0, editWeighted: false, editSubmitErr: false};
+		this.state = { user: 0, rows: [], editing: false, editName: '', editIndex: 0, 
+		editMax: 0, editWeighted: false, editSubmitErr: false };
 	}
 
-	//Get exercises from database when output rendered to dom 
+	//Get the user when output rendered to dom 
 	componentDidMount(){
-		this.getExercises();
+		this.getUser();
+	}
+
+	//get the user from local storage, or create a new user with a random integer value if applicable
+	getUser(){
+		const visited = localStorage.getItem('visited');
+		if(!visited){
+			localStorage.setItem('visited', true);
+			//set user to pseudorandom number
+			const date = new Date();
+			const user = parseInt(date.getTime(), 10) + Math.floor((Math.random() * 10000) + 1);
+			localStorage.setItem('user', user);
+		}
+		this.setState({ user: localStorage.getItem('user') }, () => {
+			this.getExercises();
+		});
 	}
 
 	//get the Exercises from the database and change the view accordingly
 	getExercises(){
-		fetch('/getExercises', { method: 'GET' }).then( response => {
+		fetch('/getExercises', { 
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},  
+			body: JSON.stringify({ user: this.state.user })
+			}).then( response => {
 			return response.json();
 		}).then( data => {
 			let newRows = [];
@@ -48,11 +72,12 @@ class WorkoutPlanner extends Component{
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
+				user: this.state.user,
 				index: this.state.rows.length,
 				name: name,
 				max: max,
 				weighted: weighted
-			}),
+			})
 		}).then( response => {
 			return response.json();
 		}).then(data => {
@@ -80,11 +105,12 @@ class WorkoutPlanner extends Component{
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
+					user: this.state.user,
 					index: this.state.editIndex,
 					name: this.state.editName,
 					max: this.state.editMax, 
 					weighted: this.state.editWeighted
-				}),
+				})
 			}).then(this.getExercises());
 		}
 		e.preventDefault();
@@ -104,8 +130,9 @@ class WorkoutPlanner extends Component{
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
+				user: this.state.user,
 				index: index,
-			}),
+			})
 		}).then(this.getExercises());
 	}
 
