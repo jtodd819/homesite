@@ -46,7 +46,6 @@ class MailForm extends Component{
 
 	//Return the validity of an input field based on its length
 	getLengthValidation(length){
-		console.log(length);
 		if(length > 0){
 			return 'success';
 		}

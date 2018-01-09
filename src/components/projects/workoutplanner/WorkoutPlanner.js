@@ -49,16 +49,20 @@ class WorkoutPlanner extends Component{
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
 			},  
-			body: JSON.stringify({ user: this.state.user })
-			}).then( response => {
-			return response.json();
-		}).then( data => {
-			let newRows = [];
-			for(const exercise of data){
-				newRows.push(<Exercise key={exercise.index} index={exercise.index} 
-				editRow={this.edit} deleteRow={this.delete} name={exercise.name} max={exercise.max} weighted={exercise.weighted}/>);
+			body: JSON.stringify({
+				user: this.state.user
+			})
+		}).then( response => {
+			if(response.ok){
+				response.json().then( data => {
+					let newRows = [];
+					for(const exercise of data){
+						newRows.push(<Exercise key={exercise.index} index={exercise.index} 
+						editRow={this.edit} deleteRow={this.delete} name={exercise.name} max={exercise.max} weighted={exercise.weighted}/>);
+					}
+					this.setState({rows: newRows});
+				});
 			}
-			this.setState({rows: newRows});
 		});
 	}
 
@@ -78,11 +82,10 @@ class WorkoutPlanner extends Component{
 				max: max,
 				weighted: weighted
 			})
-		}).then( response => {
-			return response.json();
-		}).then(data => {
-			console.log(data);
-			this.getExercises();
+		}).then(response =>{
+			if(response.ok){
+				this.getExercises();
+			};
 		});
 	}
 
@@ -111,7 +114,11 @@ class WorkoutPlanner extends Component{
 					max: this.state.editMax, 
 					weighted: this.state.editWeighted
 				})
-			}).then(this.getExercises());
+			}).then(response =>{ 
+				if(response.ok){
+					this.getExercises();
+				};  
+			}); 
 		}
 		e.preventDefault();
 	}
@@ -133,7 +140,11 @@ class WorkoutPlanner extends Component{
 				user: this.state.user,
 				index: index,
 			})
-		}).then(this.getExercises());
+		}).then(response =>{ 
+			if(response.ok){
+				this.getExercises();
+			};  
+		}); 
 	}
 
 	//change the value of the state's edit value when editing data in edit form

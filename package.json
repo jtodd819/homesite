@@ -1,9 +1,9 @@
 {
   "name": "homesite",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
-  "proxy": "http://localhost:3001/",
-	"homepage": "james-todd.net",
+	"proxy": "http://localhost:3001",
+	"homepage": "http://james-todd.net",
   "dependencies": {
     "body-parser": "^1.18.2",
     "bootstrap": "^3.3.7",
@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-		"deploy": "concurrently \"npm run server\" \"serve -s build -p 3000\"",
+		"deploy": "DEPLOY=1 npm run server",
     "client": "react-scripts start",
     "server": "node server/server.js",
     "build": "react-scripts build",
