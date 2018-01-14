@@ -204,7 +204,7 @@ class WorkoutPlanner extends Component{
 							{!this.state.editWeighted &&
 								<div>
 									Maximum Rep Count:
-									<input type="number" name="editMax" value={this.state.editMax} onChange={this.handleChange}/>
+									<input type="number" name="editMax" value={this.state.editMax} onChange={this.changeEdit}/>
 									<br/>
 								</div>
 							}
