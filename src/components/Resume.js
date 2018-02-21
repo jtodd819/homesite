@@ -26,7 +26,7 @@ class Resume extends Component{
 					Operating Systems: Windows, macOS, GNU/Linux<br/>
 					Markup Languages: HTML<br/>
 					Style Sheet Languages: CSS<br/>
-					Relational Database Management Systems: MySQL, MongoDB<br/>
+					Database Management Systems: MySQL, MongoDB, Google Cloud Datastore<br/>
 					Version Control: Git</p>
 				<p className='text-warning'><em>References available upon request.</em></p>
 			</div>
