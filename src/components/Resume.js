@@ -18,7 +18,8 @@ class Resume extends Component{
 					<p className='text-success'>University of North Carolina: Introductory and Intermediate Programming (Java) <br/>
 					Oregon State: Accelerated intro to Computer Science (C++), Discrete Structures, Data Structures, <br/>
 					Computer Architecture and Assembly Language, Web Development, Intro to Usability Engineering, <br/>
-					Introduction to Databases, Analysis of Algorithms, Operating Systems, Introduction to Computer Networking</p>
+					Introduction to Databases, Analysis of Algorithms, Operating Systems, Introduction to Computer Networking,<br/>
+					Mobile/Cloud Development, Capstone Project</p><br/>
 				<p className='text-primary'><strong>PROJECTS</strong><br/></p>
 				<p className='text-warning'><em>Visit the Projects tab.</em></p>
 				<p className='text-primary'><strong>SKILLS</strong><br/></p>
