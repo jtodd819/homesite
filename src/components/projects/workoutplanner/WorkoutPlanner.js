@@ -1,7 +1,7 @@
 /*James Todd - 12/28/2017 - A single page ReactJS workout planner application using react-bootstrap for styling*/
 
 import React, { Component } from "react";
-import { PageHeader, Table, Well, Button, Alert} from "react-bootstrap";
+import { Table, Card, Button, Alert} from "react-bootstrap";
 import WorkoutForm from './WorkoutForm';
 import Exercise from './Exercise';
 
@@ -162,7 +162,7 @@ class WorkoutPlanner extends Component{
 	render(){
 		return(
 			<div>
-				<PageHeader>Workout Planner<small> by James Todd</small></PageHeader> 
+				<header>Workout Planner<small> by James Todd</small></header>
 				<WorkoutForm add={this.add}/>
 				<Table condensed hover>
 					<thead>
@@ -217,12 +217,12 @@ class WorkoutPlanner extends Component{
 						<Button bsStyle="danger" onClick={this.cancelEdit}>Cancel</Button>
 					</div>
 				}
-				<Well>For weighted exercises, workout plan calculated at 10 intervals starting at 10% to 100% of
+				<Card>For weighted exercises, workout plan calculated at 10 intervals starting at 10% to 100% of
 				input one rep max, rounded to the nearest multiple of 5.<br/>
 				For unweighted exercises, workout plan calculated at 5 intervals of 20% of max rep count + 2, rounded to the
 				nearest integer. <br/>
 				Regimen based on <a href="https://www.amazon.com/Simplest-Effective-Training-Increase-Strength/dp/0557248299">
-				Jim Wendler's 5/3/1</a>.</Well> 
+				Jim Wendler's 5/3/1</a>.</Card> 
 			</div>
 		);
 	}

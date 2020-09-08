@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
+import { FormControl, FormGroup, FormLabel } from 'react-bootstrap';
 import '../style/MailForm.css';
 
 //Form for Sending Mail to my Address
@@ -68,17 +68,17 @@ class MailForm extends Component{
 				with your email address and a subject in the form below.</p>
 				<form className='mailForm' onSubmit={this.handleSend}>
 					<FormGroup validationState={this.getAddressValidation(this.state.address)}>
-						<ControlLabel>Address:</ControlLabel><br/>
+						<FormLabel>Address:</FormLabel><br/>
 						<FormControl name='address' type='text' value={this.state.address} 
 						onChange={this.handleTextInput}/><br/>
 					</FormGroup>
 					<FormGroup validationState={this.getLengthValidation(this.state.subject.length)}>
-						<ControlLabel>Subject:</ControlLabel><br/>
+						<FormLabel>Subject:</FormLabel><br/>
 						<FormControl name='subject' type='text' value={this.state.subject} 
 						onChange={this.handleTextInput}/><br/>
 					</FormGroup>
 					<FormGroup validationState={this.getLengthValidation(this.state.message.length)}>
-						<ControlLabel>Message:</ControlLabel><br/>
+						<FormLabel>Message:</FormLabel><br/>
 						<FormControl name='message' type='text' value={this.state.message}
 						componentClass='textarea' onChange={this.handleTextInput}/><br/>
 					</FormGroup>
