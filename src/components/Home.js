@@ -7,10 +7,10 @@ import resume from '../media/Resume.JPG'
 class Home extends Component{
 	render(){
 		return(
-			<Container>
+			<Container fluid>
 				<Row>
 					<Col>
-						<Card>
+						<Card border="dark">
 							<Card.Img variant="top" src={me}/>
 							<Card.Body>
 								<Card.Title>Welcome</Card.Title>
@@ -22,7 +22,7 @@ class Home extends Component{
 						</Card>
 					</Col>
 					<Col>
-						<Image src={resume}/>
+						<Image style = {{border: "1px solid black"}} src={resume}/>
 					</Col>
 				</Row>
 			</Container>
