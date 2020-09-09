@@ -2,7 +2,6 @@
   "name": "homesite",
   "version": "1.0.0",
   "private": true,
-  "proxy": "http://localhost:3001",
   "homepage": "http://james-todd.net",
   "dependencies": {
     "body-parser": "^1.18.2",

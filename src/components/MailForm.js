@@ -76,8 +76,10 @@ class MailForm extends Component{
 								type="text"
 								value={values.from}
 								onChange={handleChange}
+								isInvalid={touched.from && !!errors.from}
 								isValid={touched.from && !errors.from}/>
-							<Form.Control.Feedback>Nice!</Form.Control.Feedback>
+							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
+							<Form.Control.Feedback type="invalid">{errors.from}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group>
 							<Form.Label>To:</Form.Label>
