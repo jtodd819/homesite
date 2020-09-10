@@ -21,7 +21,7 @@ class MailForm extends Component{
 	getFormSchema() {
 		return Yup.object().shape({
 			from: Yup.string()
-				.email('Invalid email')
+				.email('Invalid Email')
 				.required('Required'),
 			subject: Yup.string()
 				.max(50, 'Too Long!')
@@ -54,6 +54,8 @@ class MailForm extends Component{
 			<Formik
 				validationSchema={this.schema}
 				onSubmit={console.log}
+				validateOnBlur={true}
+				validateOnChange={true}
 				initialValues={{
 					from: "",
 					subject: "",
@@ -65,6 +67,7 @@ class MailForm extends Component{
 					errors,
 					touched,
 					handleChange,
+					handleBlur,
 					handleSubmit,
 					isValid,
 				}) => (
@@ -76,6 +79,7 @@ class MailForm extends Component{
 								type="text"
 								value={values.from}
 								onChange={handleChange}
+								onBlur={handleBlur}
 								isInvalid={touched.from && !!errors.from}
 								isValid={touched.from && !errors.from}/>
 							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
@@ -92,18 +96,26 @@ class MailForm extends Component{
 								type="text"
 								value={values.subject}
 								onChange={handleChange}
+								onBlur={handleBlur}
+								isInvalid={touched.subject && !!errors.subject}
 								isValid={touched.subject && !errors.subject}/>
-							<Form.Control.Feedback>Nice!</Form.Control.Feedback>
+							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
+							<Form.Control.Feedback type="invalid">{errors.subject}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group controlId="validationFormikBody">
 							<Form.Label>Body:</Form.Label>
 							<Form.Control
+								as="textarea"
+								rows="4"
 								name="body"
 								type="text"
 								value={values.body}
 								onChange={handleChange}
+								onBlur={handleBlur}
+								isInvalid={touched.body && !!errors.body}
 								isValid={touched.body && !errors.body}/>
-							<Form.Control.Feedback>Nice!</Form.Control.Feedback>
+							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
+							<Form.Control.Feedback type="invalid">{errors.body}</Form.Control.Feedback>
 						</Form.Group>
 						<Button type="submit"></Button>
 					</Form>
