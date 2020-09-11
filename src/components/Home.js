@@ -9,7 +9,7 @@ class Home extends Component{
 		return(
 			<Container fluid>
 				<Row>
-					<Col>
+					<Col md={{offset: 1}}>
 						<Card border="dark">
 							<Card.Img variant="top" src={me}/>
 							<Card.Body>
@@ -21,8 +21,8 @@ class Home extends Component{
 							</Card.Body>
 						</Card>
 					</Col>
-					<Col>
-						<Image style = {{border: "1px solid black"}} src={resume}/>
+					<Col md={{offset: 1}}>
+						<Image fluid style={{border: "1px solid black", height: '800px'}} src={resume}/>
 					</Col>
 				</Row>
 			</Container>

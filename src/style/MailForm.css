@@ -1,7 +1,3 @@
-.mailForm .has-error{
-	color: #D33682;
-}
-
-.mailForm .has-success{
-	color: #2AA198;
+.form-control {
+	border: 1px solid black;
 }

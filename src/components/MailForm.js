@@ -117,7 +117,7 @@ class MailForm extends Component{
 							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">{errors.body}</Form.Control.Feedback>
 						</Form.Group>
-						<Button type="submit"></Button>
+						<Button type="submit">Send</Button>
 					</Form>
 				)}
 			</Formik>

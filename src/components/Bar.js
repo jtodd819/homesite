@@ -6,11 +6,11 @@ import '../style/Bar.css';
 class Bar extends Component{
 	render() {
 		return (
-			<Navbar className='bar'>
+			<Navbar className="bar">
 				<Navbar.Brand href="/home">Home</Navbar.Brand>
 				<Nav.Link href="/projects">Projects</Nav.Link>
 				<Nav.Link href="/contact">Contact</Nav.Link>
-				<Nav.Link href="https://github.com/jtodd819"><i style={{'font-size': '30px'}}className='fa fa-github'/></Nav.Link>
+				<Nav.Link href="https://github.com/jtodd819"><i className='fa fa-github icon'/></Nav.Link>
 			</Navbar>
 		);
 	}
