@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import  { Formik } from 'formik'
+import  { Formik } from 'formik';
 import * as Yup from 'yup';
 import '../style/MailForm.css';
 
 //Form for Sending Mail to my Address
-class MailForm extends Component{
+class MailForm extends Component {
 
 	//messages are composed of address, subject, and message
 	constructor(props){

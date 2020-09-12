@@ -1,172 +1,149 @@
-/*James Todd - 12/28/2017 - A single page ReactJS workout planner application using react-bootstrap for styling*/
-
 import React, { Component } from "react";
-import { Table, Card, Button, Alert} from "react-bootstrap";
+import { Table, Card, Button, Jumbotron, Modal } from "react-bootstrap";
 import WorkoutForm from './WorkoutForm';
-import Exercise from './Exercise';
+import ExerciseRow from './ExerciseRow';
+
+const SERVER_URI = process.env.SERVER_URI;
 
 //App containing form and workouts table
 class WorkoutPlanner extends Component{
 	constructor(props){
 		super(props);
 		this.add = this.add.bind(this);
-		this.edit = this.edit.bind(this);
+		this.onEdit = this.onEdit.bind(this);
+		this.update = this.update.bind(this);
 		this.delete = this.delete.bind(this);
-		this.getUser = this.getUser.bind(this);
 		this.getExercises = this.getExercises.bind(this);
-		this.changeExercise = this.changeExercise.bind(this);
-		this.changeEdit = this.changeEdit.bind(this);
-		this.cancelEdit = this.cancelEdit.bind(this);
-		this.state = { user: 0, rows: [], editing: false, editName: '', editIndex: 0, 
-		editMax: 0, editWeighted: false, editSubmitErr: false };
-	}
-
-	//Get the user when output rendered to dom 
-	componentDidMount(){
-		this.getUser();
-	}
-
-	//get the user from local storage, or create a new user with a random integer value if applicable
-	getUser(){
-		const visited = localStorage.getItem('visited');
-		if(!visited){
-			localStorage.setItem('visited', true);
-			//set user to pseudorandom number
-			const date = new Date();
-			const user = parseInt(date.getTime(), 10) + Math.floor((Math.random() * 10000) + 1);
-			localStorage.setItem('user', user);
+		this.handleAddShow = this.handleAddShow.bind(this);
+		this.handleAddClose = this.handleAddClose.bind(this);
+		this.handleEditShow = this.handleAddShow.bind(this);
+		this.handleEditClose = this.handleEditClose.bind(this);
+		this.state = { 
+			userId: this.props.user ? this.props.user.id : null,
+			exerciseRows: [], 
+			addingExercise: false,
+			editingExercise: false,
+			currentExercise: null
 		}
-		this.setState({ user: localStorage.getItem('user') }, () => {
-			this.getExercises();
-		});
 	}
 
-	//get the Exercises from the database and change the view accordingly
-	getExercises(){
-		fetch('/getExercises', { 
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},  
-			body: JSON.stringify({
-				user: this.state.user
-			})
-		}).then( response => {
-			if(response.ok){
-				response.json().then( data => {
-					let newRows = [];
-					for(const exercise of data){
-						newRows.push(<Exercise key={exercise.index} index={exercise.index} 
-						editRow={this.edit} deleteRow={this.delete} name={exercise.name} max={exercise.max} weighted={exercise.weighted}/>);
-					}
-					this.setState({rows: newRows});
-				});
-			}
-		});
+	/**
+	 * Modal state management handlers
+	 */
+
+	handleAddShow() {
+		this.setState({addingExercise: true});
 	}
 
-	//add an exericse to the table
-	add(name, max, weighted){
-		//add to database
-		fetch('/add', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				user: this.state.user,
-				index: this.state.rows.length,
-				name: name,
-				max: max,
-				weighted: weighted
-			})
-		}).then(response =>{
-			if(response.ok){
-				this.getExercises();
-			};
-		});
+	handleAddClose() {
+		this.setState({addingExercise: false});
 	}
 
-	//Make the editing form visible for editing an exercise
-	edit(name, index, max, weighted){
-		this.setState({editing: true, editName: name, editIndex: index, editMax: max, editWeighted: weighted});
+	handleEditShow() {
+		this.setState({editingExercise: true});
 	}
 
-	//change an exercise after submitting changes from the edit form
-	changeExercise(e){
-		//make sure a valid name and max value submitted
-		if(this.state.editName === '' || this.state.editMax < 1){
-			this.setState({editSubmitErr: true});
-		}else{
-			//change exercise in the database
-			fetch('/change', {
+	handleEditClose() {
+		this.setState({editingExercise: false});
+	}
+
+	/**
+	 * Fetch current exercises from the database and update view
+	 */
+	async getExercises() {
+		try {
+			const response = await fetch(`${SERVER_URI}/exercises?userId=${this.state.userId}`);
+			const data = await response.json();
+			this.setState({exerciseRows: data.map(d => {
+				return <ExerciseRow index={d.id} edit={this.onEdit} delete={this.delete} name={d.name} max={d.max} isWeighted={d.isWeighted}/>;
+			})});
+		} catch (err) {
+			console.error(`Error while fetching exercises: ${err}`)
+		}
+	}
+
+	/**
+	 * Callback to handle edit clicks on exercise rows
+	 * @param {*} exercise the exercise to edit
+	 */
+	onEdit(exercise)  {
+		this.setState({currentExercise: exercise});
+		this.handleEditShow();
+	}
+
+	/**
+	 * Adds an exercise to the exercise table
+	 * @param {*} exercise Exercise submitted through form
+	 */
+	async add (exercise) {
+		try {
+			await fetch(`${SERVER_URI}/exercises`, {
 				method: 'POST',
 				headers: {
 					Accept: 'application/json',
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					user: this.state.user,
-					index: this.state.editIndex,
-					name: this.state.editName,
-					max: this.state.editMax, 
-					weighted: this.state.editWeighted
+					user: this.state.userId,
+					name: exercise.name,
+					max: exercise.max,
+					isWeighted: exercise.isWeighted
 				})
-			}).then(response =>{ 
-				if(response.ok){
-					this.getExercises();
-				};  
-			}); 
+			});
+			this.handleAddClose();
+			this.getExercises();
+		} catch(err) {
+			console.error(`Error while adding a new exercise with name ${exercise.name}: ${err}`)
 		}
-		e.preventDefault();
 	}
 
-	//remove an exercise at a given row index
-	delete(index){
-		//remove editing form if the currently edited exericse is deleted
-		if(this.state.editing && index === this.state.editIndex){
-			this.setState({editing: false});
+	/**
+	 * Updates a given exercise
+	 * @param {*} exercise exercise to update
+	 */
+	async update (exercise) {
+		try {
+			await fetch(`${SERVER_URI}/exercises/${exercise.id}`, {
+				method: 'PUT',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					id: exercise.id,
+					name: exercise.name,
+					max: exercise.max,
+					weighted: exercise.isWeighted
+				})
+			});
+			this.handleEditClose();
+			this.getExercises();
+		} catch (err) {
+			console.error(`Error while updating exercise with name ${exercise.name}: ${err}`)
 		}
-		//remove from the database
-		fetch('/delete', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				user: this.state.user,
-				index: index,
-			})
-		}).then(response =>{ 
-			if(response.ok){
-				this.getExercises();
-			};  
-		}); 
 	}
 
-	//change the value of the state's edit value when editing data in edit form
-	changeEdit(e){
-		const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-		this.setState({[e.target.name] : value });
+	/**
+	 * Delete an exercise from the planner
+	 * @param {*} exercise exercise to delete
+	 */
+	async delete (exercise) {
+		try {
+			await fetch(`${SERVER_URI}/exercises/${exercise.id}`, {method: 'DELETE'});
+			this.getExercises();
+		} catch (err) {
+			console.error(`Error while deleting exercise with name ${exercise.name}: ${err}`)
+		}
 	}
 
-	//cancel editing used when hitting the cancel button
-	cancelEdit(){
-		this.setState({editing: false});
-	}
-
-	//returns a form for submitting workouts and a table of those submitted
-	render(){
+	render () {
 		return(
-			<div>
-				<header>Workout Planner<small> by James Todd</small></header>
-				<WorkoutForm add={this.add}/>
-				<Table condensed hover>
+			<Jumbotron fluid>
+				<h1>5/3/1 Workout Planner</h1>
+				<Button onClick={this.handleAddShow}>Add Exercise</Button>
+				<Table>
 					<thead>
-					{this.state.rows.length > 0 &&
+					{this.state.exerciseRows.length > 0 &&
 						<tr>
 						<th>Name</th>
 						<th></th>
@@ -183,47 +160,30 @@ class WorkoutPlanner extends Component{
 					}
 					</thead>
 					<tbody>{this.state.rows}</tbody>
-				</Table> 
-				{this.state.editing === true &&
-					<div>
-						<form onSubmit={this.changeExercise}>    
-							Exercise Name:
-							<input type="text" name="editName" value={this.state.editName} onChange={this.changeEdit}/>
-							<br/>
-							Does the exercise use weights?
-							<input type="checkbox" name="editWeighted" checked={this.state.editWeighted} onChange={this.changeEdit}/>
-							<br/>
-							{this.state.editWeighted && 
-								<div>
-									One Rep Max (lbs):
-									<input type="number" name="editMax" value={this.state.editMax} 
-									onChange={this.changeEdit}/>
-									<br/>
-								</div>
-							}
-							{!this.state.editWeighted &&
-								<div>
-									Maximum Rep Count:
-									<input type="number" name="editMax" value={this.state.editMax} onChange={this.changeEdit}/>
-									<br/>
-								</div>
-							}
-							<input type="submit" value="Change"/>
-							<br/>
-							{this.state.editSubmitErr === true && <Alert bsStyle="warning">Error: workout submitted incorrectly. Please submit
-							workout with a name and max value > 0. </Alert>
-							}
-						</form>
-						<Button bsStyle="danger" onClick={this.cancelEdit}>Cancel</Button>
-					</div>
-				}
+				</Table>
 				<Card>For weighted exercises, workout plan calculated at 10 intervals starting at 10% to 100% of
 				input one rep max, rounded to the nearest multiple of 5.<br/>
 				For unweighted exercises, workout plan calculated at 5 intervals of 20% of max rep count + 2, rounded to the
 				nearest integer. <br/>
 				Regimen based on <a href="https://www.amazon.com/Simplest-Effective-Training-Increase-Strength/dp/0557248299">
 				Jim Wendler's 5/3/1</a>.</Card> 
-			</div>
+				<Modal show={this.state.addingExercise} onHide={this.handleAddClose}>
+					<Modal.Header closeButton>
+						<Modal.Title>Create New Exercise</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<WorkoutForm save={this.add}/>
+					</Modal.Body>
+				</Modal>
+				<Modal show={this.state.editingExercise} onHide={this.handleEditClose}>
+					<Modal.Header closeButton>
+						<Modal.Title>Edit Exercise</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<WorkoutForm exercise={this.state.currentExercise} save={this.update}/>
+					</Modal.Body>
+				</Modal>
+			</Jumbotron>
 		);
 	}
 }

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 import '../style/Home.css';
-import me from '../media/pic.JPG';
+import me from '../media/me.jpg';
 import Resume from './Resume';
 
 class Home extends Component{
