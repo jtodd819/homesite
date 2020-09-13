@@ -57,7 +57,7 @@ class MailForm extends Component {
 				validateOnBlur={true}
 				validateOnChange={true}
 				initialValues={{
-					from: "",
+					from: this.props.user && this.props.user.emailAddress ? this.props.user.emailAddress : "",
 					subject: "",
 					body: ""
 				}}

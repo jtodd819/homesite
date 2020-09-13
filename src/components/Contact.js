@@ -6,7 +6,7 @@ class Contact extends Component{
 	render(){
 		return(
 			<Container style = {{'background-color': 'rgb(209, 224, 224)', 'padding': '30px 15px 30px 15px'}}>
-				<MailForm />
+				<MailForm user = {this.props.user} />
 			</Container>
 		);
 	}

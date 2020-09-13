@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Bar from './Bar';
 import Page from './Page';
-import UserManagement from './UserManagement';
+import UserManagement from './account/UserManagement';
 import { Container, Row, Col } from 'react-bootstrap';
 
 class App extends Component {

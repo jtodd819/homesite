@@ -22,7 +22,7 @@ class UserManagement extends Component {
 		const isLoggedIn = !!this.props.user;
 		let managementComponent;
 		if (isLoggedIn) {
-			managementComponent = <UserBar onLogout={this.handleLogout}/>
+			managementComponent = <UserBar user={this.props.user} onLogout={this.handleLogout}/>
 		} else {
 		   managementComponent = <LoginButton onLogin={this.handleLogin}/>
 		}
