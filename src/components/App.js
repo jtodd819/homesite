@@ -9,6 +9,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {user: null};
+    this.setUser = this.setUser.bind(this);
   }
 
   setUser(user) {
@@ -23,7 +24,7 @@ class App extends Component {
             <Bar />
           </Col>
           <Col>
-           <UserManagement setUser={this.setUser}/>
+           <UserManagement user={this.state.user} setUser={this.setUser}/>
           </Col>
         </Row>
         <Row>

@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { Table, Card, Button, Jumbotron, Modal } from "react-bootstrap";
 import WorkoutForm from './WorkoutForm';
 import ExerciseRow from './ExerciseRow';
-
-const SERVER_URI = process.env.SERVER_URI;
+import API from 'api';
 
 //App containing form and workouts table
 class WorkoutPlanner extends Component{
@@ -19,7 +18,6 @@ class WorkoutPlanner extends Component{
 		this.handleEditShow = this.handleAddShow.bind(this);
 		this.handleEditClose = this.handleEditClose.bind(this);
 		this.state = { 
-			userId: this.props.user ? this.props.user.id : null,
 			exerciseRows: [], 
 			addingExercise: false,
 			editingExercise: false,
@@ -52,10 +50,9 @@ class WorkoutPlanner extends Component{
 	 */
 	async getExercises() {
 		try {
-			const response = await fetch(`${SERVER_URI}/exercises?userId=${this.state.userId}`);
-			const data = await response.json();
-			this.setState({exerciseRows: data.map(d => {
-				return <ExerciseRow index={d.id} edit={this.onEdit} delete={this.delete} name={d.name} max={d.max} isWeighted={d.isWeighted}/>;
+			const response = await API.get(`/exercises?userName=${this.props.user.userName}`);
+			this.setState({exerciseRows: response.data.map(d => {
+				return <ExerciseRow id={d.id} edit={this.onEdit} delete={this.delete} name={d.name} max={d.max} isWeighted={d.isWeighted}/>;
 			})});
 		} catch (err) {
 			console.error(`Error while fetching exercises: ${err}`)
@@ -66,7 +63,7 @@ class WorkoutPlanner extends Component{
 	 * Callback to handle edit clicks on exercise rows
 	 * @param {*} exercise the exercise to edit
 	 */
-	onEdit(exercise)  {
+	onEdit(exercise) {
 		this.setState({currentExercise: exercise});
 		this.handleEditShow();
 	}
@@ -77,19 +74,7 @@ class WorkoutPlanner extends Component{
 	 */
 	async add (exercise) {
 		try {
-			await fetch(`${SERVER_URI}/exercises`, {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					user: this.state.userId,
-					name: exercise.name,
-					max: exercise.max,
-					isWeighted: exercise.isWeighted
-				})
-			});
+			await API.post('/exercises', {userName: this.props.user.userName, name: exercise.name, max: exercise.max, isWeighted: exercise.isWeighted});
 			this.handleAddClose();
 			this.getExercises();
 		} catch(err) {
@@ -103,19 +88,7 @@ class WorkoutPlanner extends Component{
 	 */
 	async update (exercise) {
 		try {
-			await fetch(`${SERVER_URI}/exercises/${exercise.id}`, {
-				method: 'PUT',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					id: exercise.id,
-					name: exercise.name,
-					max: exercise.max,
-					weighted: exercise.isWeighted
-				})
-			});
+			await API.put(`/exercises/${exercise.id}`, {userName: this.props.user.userName, id: exercise.id, name: exercise.name, max: exercise.max, weighted: exercise.isWeighted});
 			this.handleEditClose();
 			this.getExercises();
 		} catch (err) {
@@ -129,7 +102,7 @@ class WorkoutPlanner extends Component{
 	 */
 	async delete (exercise) {
 		try {
-			await fetch(`${SERVER_URI}/exercises/${exercise.id}`, {method: 'DELETE'});
+			await API.delete(`/exercises/${exercise.id}`);
 			this.getExercises();
 		} catch (err) {
 			console.error(`Error while deleting exercise with name ${exercise.name}: ${err}`)
@@ -159,7 +132,7 @@ class WorkoutPlanner extends Component{
 						</tr>
 					}
 					</thead>
-					<tbody>{this.state.rows}</tbody>
+					<tbody>{this.state.exerciseRows}</tbody>
 				</Table>
 				<Card>For weighted exercises, workout plan calculated at 10 intervals starting at 10% to 100% of
 				input one rep max, rounded to the nearest multiple of 5.<br/>

@@ -11,10 +11,6 @@ import WorkoutPlanner from './projects/workoutplanner/WorkoutPlanner';
 // Serve components to the page based on the provided URL
 class Page extends Component{
 
-	constructor(props) {
-		super(props);
-	}
-
 	render(){
 		return(
 			<Switch>
