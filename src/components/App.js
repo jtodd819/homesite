@@ -8,11 +8,14 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {user: null};
+    const initialUser = localStorage.getItem('user');
+    this.state = {user: initialUser ? JSON.parse(initialUser) : null};
     this.setUser = this.setUser.bind(this);
   }
 
   setUser(user) {
+		delete user.password;
+		localStorage.setItem('user', JSON.stringify(user));
     this.setState({user: user});
   }
 

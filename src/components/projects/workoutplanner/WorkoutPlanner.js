@@ -52,7 +52,7 @@ class WorkoutPlanner extends Component{
 		try {
 			const response = await API.get(`/exercises?userName=${this.props.user.userName}`);
 			this.setState({exerciseRows: response.data.map(d => {
-				return <ExerciseRow id={d.id} edit={this.onEdit} delete={this.delete} name={d.name} max={d.max} isWeighted={d.isWeighted}/>;
+				return <ExerciseRow key={d.id} id={d.id} edit={this.onEdit} delete={this.delete} name={d.name} max={d.max} isWeighted={d.isWeighted}/>;
 			})});
 		} catch (err) {
 			console.error(`Error while fetching exercises: ${err}`)
