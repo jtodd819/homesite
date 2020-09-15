@@ -14,8 +14,12 @@ class App extends Component {
   }
 
   setUser(user) {
-		delete user.password;
-		localStorage.setItem('user', JSON.stringify(user));
+    if (user) {
+      delete user.password;
+      localStorage.setItem('user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('user');
+    }
     this.setState({user: user});
   }
 
