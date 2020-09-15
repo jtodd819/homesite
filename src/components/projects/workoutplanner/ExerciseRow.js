@@ -7,32 +7,31 @@ class ExerciseRow extends Component{
 		super(props);
 		this.edit = this.edit.bind(this);
 		this.delete = this.delete.bind(this);
-		this.state = {
-			exercise: {name: this.props.name, id: this.props.id, max: this.props.max, isWeighted: this.props.isWeighted}
-		}
 	}
 
 	/**
 	 * Edits the exercise
 	 */
-	edit(){
-		this.props.edit(this.state.exercise);
+	edit() {
+		const currentExercise = {name: this.props.name, id: this.props.id, max: this.props.max, isWeighted: this.props.isWeighted};
+		this.props.edit(currentExercise);
 	}
 
 	/**
 	 * Deletes the exercise
 	 */
-	delete(){
-		this.props.delete(this.state.exercise);
+	delete() {
+		const currentExercise = {name: this.props.name, id: this.props.id, max: this.props.max, isWeighted: this.props.isWeighted};
+		this.props.delete(currentExercise);
 	}
 
 	render(){
 		// Weighted exercise
-		if (this.state.exercise.isWeighted) {
-			let oneRepMax = parseInt(this.state.exercise.max, 10);
+		if (this.props.isWeighted) {
+			let oneRepMax = parseInt(this.props.max, 10);
 			return(
 				<tr>
-					<td>{this.state.exercise.name}</td>
+					<td>{this.props.name}</td>
 					<td>3-5 reps x {5 * Math.round(Math.round(.1 * oneRepMax) / 5)}lbs</td>
 					<td>3-5 reps x {5 * Math.round(Math.round(.2 * oneRepMax) / 5)}lbs</td>
 					<td>3-5 reps x {5 * Math.round(Math.round(.3 * oneRepMax) / 5)}lbs</td>
@@ -49,10 +48,10 @@ class ExerciseRow extends Component{
 			);
 		// Unweighted exercise
 		} else {
-			let set = Math.round((parseInt(this.state.exercise.max, 10) + 2) * .2);
+			let set = Math.round((parseInt(this.props.max, 10) + 2) * .2);
 			return(
 				<tr>
-					<td>{this.state.exercise.name}</td>
+					<td>{this.props.name}</td>
 					<td>{set} reps</td>
 					<td>{set} reps</td>
 					<td>{set} reps</td>

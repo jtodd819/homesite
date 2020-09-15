@@ -51,7 +51,7 @@ class UserBar extends Component {
                 </Row>
                 <Modal show={this.state.showModal} onHide={this.handleEditClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title></Modal.Title>
+                        <Modal.Title>Change Account Settings</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <AccountForm editAccount={this.props.user} onSubmit={this.handleEditSave}/>

@@ -94,7 +94,7 @@ class WorkoutPlanner extends PureComponent{
 	 */
 	async update (exercise) {
 		try {
-			await API.put(`/exercises/${exercise.id}`, {name: exercise.name, max: exercise.max, weighted: exercise.isWeighted});
+			await API.put(`/exercises/${exercise.id}`, {name: exercise.name, max: exercise.max, isWeighted: exercise.isWeighted});
 			this.handleEditClose();
 			this.getExercises();
 		} catch (err) {

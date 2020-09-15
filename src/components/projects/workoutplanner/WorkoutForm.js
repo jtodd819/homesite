@@ -83,7 +83,7 @@ class WorkoutForm extends Component{
 								name="isWeighted"
 								type="checkbox"
 								onChange={handleChange}
-								value={values.isWeighted}
+								checked={values.isWeighted}
 							/>
 						</Form.Group>
 						<Form.Group controlId="validationFormikMax">
