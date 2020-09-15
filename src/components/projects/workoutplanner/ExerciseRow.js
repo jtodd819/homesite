@@ -1,4 +1,3 @@
-import { stat } from 'fs';
 import React, {Component} from 'react';
 import { Button } from 'react-bootstrap';
 
@@ -45,7 +44,7 @@ class ExerciseRow extends Component{
 					<td>1 rep x {5 * Math.round(Math.round(.9 * oneRepMax) / 5)}lbs</td>
 					<td>1 rep or PR x {5 * Math.round(oneRepMax / 5)}lbs</td>
 					<td><Button onClick={this.edit}>Edit</Button></td>
-					<td><Button bsStyle="danger" onClick={this.delete}>Delete</Button></td>
+					<td><Button variant="danger" onClick={this.delete}>Delete</Button></td>
 				</tr>
 			);
 		// Unweighted exercise
@@ -53,14 +52,19 @@ class ExerciseRow extends Component{
 			let set = Math.round((parseInt(this.state.exercise.max, 10) + 2) * .2);
 			return(
 				<tr>
-					<td>{stat.exercise.name}</td>
+					<td>{this.state.exercise.name}</td>
 					<td>{set} reps</td>
 					<td>{set} reps</td>
 					<td>{set} reps</td>
 					<td>{set} reps</td>
 					<td>{set} reps</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
 					<td><Button onClick={this.edit}>Edit</Button></td>
-					<td><Button onClick={this.delete} bsStyle="danger">Delete</Button></td>
+					<td><Button onClick={this.delete} variant="danger">Delete</Button></td>
 				</tr>
 			);
 		}

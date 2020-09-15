@@ -100,7 +100,8 @@ class WorkoutForm extends Component{
 							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">{errors.max}</Form.Control.Feedback>
 						</Form.Group>
-						<Button type="submit">Add Exercise</Button>
+						{!this.props.exercise && <Button type="submit">Add Exercise</Button>}
+						{this.props.exercise && <Button type="submit">Update Exercise</Button>}
 					</Form>
 				)}
 			</Formik>

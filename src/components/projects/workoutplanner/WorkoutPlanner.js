@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Table, Card, Button, Jumbotron, Modal } from "react-bootstrap";
 import WorkoutForm from './WorkoutForm';
 import ExerciseRow from './ExerciseRow';
 import API from 'api';
 
 //App containing form and workouts table
-class WorkoutPlanner extends Component{
+class WorkoutPlanner extends PureComponent{
 	constructor(props){
 		super(props);
 		this.add = this.add.bind(this);
@@ -15,13 +15,19 @@ class WorkoutPlanner extends Component{
 		this.getExercises = this.getExercises.bind(this);
 		this.handleAddShow = this.handleAddShow.bind(this);
 		this.handleAddClose = this.handleAddClose.bind(this);
-		this.handleEditShow = this.handleAddShow.bind(this);
+		this.handleEditShow = this.handleEditShow.bind(this);
 		this.handleEditClose = this.handleEditClose.bind(this);
 		this.state = { 
 			exerciseRows: [], 
 			addingExercise: false,
 			editingExercise: false,
 			currentExercise: null
+		}
+	}
+	
+	componentDidMount() {
+		if (this.props.user) {
+			this.getExercises();
 		}
 	}
 
@@ -88,7 +94,7 @@ class WorkoutPlanner extends Component{
 	 */
 	async update (exercise) {
 		try {
-			await API.put(`/exercises/${exercise.id}`, {userName: this.props.user.userName, id: exercise.id, name: exercise.name, max: exercise.max, weighted: exercise.isWeighted});
+			await API.put(`/exercises/${exercise.id}`, {name: exercise.name, max: exercise.max, weighted: exercise.isWeighted});
 			this.handleEditClose();
 			this.getExercises();
 		} catch (err) {
