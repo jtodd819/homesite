@@ -3,6 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import  { Formik } from 'formik';
 import * as Yup from 'yup';
 import '../style/MailForm.css';
+import API from 'api';
 
 //Form for Sending Mail to my Address
 class MailForm extends Component {
@@ -31,21 +32,16 @@ class MailForm extends Component {
 		});
 	}
 
-	//If the address subject and message are specified send mail using nodemail posted to the express sendmail route
-	handleSend(event){
-		fetch('/sendmail', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				address: this.state.address,
-				subject: this.state.subject,
-				message: this.state.message,
-			}),
-		}).then(alert('Message Sent!'));
-		event.preventDefault();
+	/**
+	 * Send email alert to website email account
+	 * @param {*} mail message to send
+	 */
+	async handleSend (mail) {
+		try {
+			await API.post('/mail', {from: mail.from, subject: mail.subject, body: mail.body});
+		} catch (err) {
+			console.error(`Failed to send mail with subject ${mail.subject} due to error: ${err}`);
+		}
 	}
 
 	//create form for submitting email
@@ -53,7 +49,7 @@ class MailForm extends Component {
 		return(
 			<Formik
 				validationSchema={this.schema}
-				onSubmit={console.log}
+				onSubmit={this.handleSend}
 				validateOnBlur={true}
 				validateOnChange={true}
 				initialValues={{

@@ -51,11 +51,7 @@ class AccountForm extends Component {
 				}
 				await API.post('/users', newUser);
 			} else if (this.props.editAccount) {
-				const editedUser = {userName: user.userName, password: user.password};
-				if (user.emailAddress) {
-					editedUser.emailAddress = user.emailAddress;
-				}
-				await API.put(`/users/${this.props.user.id}`, {editedUser});
+				await API.put(`/users/${this.props.editAccount.id}`, {userName: user.userName, password: user.password, emailAddress: user.emailAddress});
 			}
 			const loginResult = await API.post('login', {userName: user.userName, password: user.password});
 			if (loginResult.status === 200) {
