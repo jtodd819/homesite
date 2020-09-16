@@ -60,7 +60,14 @@ class AccountForm extends Component {
 			const loginResult = await API.post('login', {userName: user.userName, password: user.password});
 			if (loginResult.status === 200) {
 				localStorage.setItem('token', loginResult.headers.authorization);
-				this.props.onSubmit(user);
+				const userResponse = await API.get(`/users/${user.userName}`)
+				if (userResponse.status === 200) {
+					user = userResponse.data;
+					delete user.password;
+					this.props.onSubmit(user);
+				} else {
+					throw 'Failed to find logged in user.';
+				}
 			} else {
 				throw 'Failed to login with user credentials.';
 			}

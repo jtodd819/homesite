@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import LoginButtons from './LoginButtons';
-import UserBar from './UserBar';
+import LoginDropdown from './LoginDropdown';
+import UserDropdown from './UserDropdown';
 
 class UserManagement extends Component {
 
@@ -30,9 +30,9 @@ class UserManagement extends Component {
 		const isLoggedIn = !!this.props.user;
 		let managementComponent;
 		if (isLoggedIn) {
-			managementComponent = <UserBar user={this.props.user} onUpdate={this.handleUser} onLogout={this.handleLogout}/>
+			managementComponent = <UserDropdown user={this.props.user} onUpdate={this.handleUser} onLogout={this.handleLogout}/>
 		} else {
-			managementComponent = <LoginButtons onLogin={this.handleUser}/>
+			managementComponent = <LoginDropdown onLogin={this.handleUser}/>
 		}
 		return(managementComponent);
 	}

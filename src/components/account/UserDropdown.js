@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import { Container, Row, Col, Button, Modal } from 'react-bootstrap';
+import { Modal, Dropdown } from 'react-bootstrap';
 import AccountForm from './AccountForm';
 
-class UserBar extends Component {
+class UserDropdown extends Component {
 
     constructor(props) {
         super(props);
@@ -37,18 +37,14 @@ class UserBar extends Component {
 
     render() {
         return(
-            <Container fluid>
-                <Row>
-                    <Col>
-                        Welcome {this.props.user.userName}!
-                    </Col>
-                    <Col>
-                        <Button onClick={this.handleEditOpen}>Edit Account</Button>
-                    </Col>
-                    <Col>
-                        <Button variant="danger" onClick={this.props.onLogout}>Logout</Button>
-                    </Col>
-                </Row>
+            <>
+                <Dropdown style={{textAlign: "right"}}>
+                    <Dropdown.Toggle variant="success">{this.props.user.userName}</Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={this.handleEditOpen}>Edit Account</Dropdown.Item>
+                        <Dropdown.Item onClick={this.props.onLogout}>Logout</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
                 <Modal show={this.state.showModal} onHide={this.handleEditClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>Change Account Settings</Modal.Title>
@@ -57,9 +53,9 @@ class UserBar extends Component {
                         <AccountForm editAccount={this.props.user} onSubmit={this.handleEditSave}/>
                     </Modal.Body>
                 </Modal>
-            </Container>
+            </>
         )
     }
 }
 
-export default UserBar;
+export default UserDropdown;

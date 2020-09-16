@@ -1,8 +1,9 @@
 import React, { PureComponent } from "react";
-import { Table, Card, Button, Jumbotron, Modal } from "react-bootstrap";
+import { Table, Button, Jumbotron, Modal, Container, Row } from "react-bootstrap";
 import WorkoutForm from './WorkoutForm';
 import ExerciseRow from './ExerciseRow';
 import API from 'api';
+import LoginReminder from "components/account/LogInReminder";
 
 //App containing form and workouts table
 class WorkoutPlanner extends PureComponent{
@@ -57,6 +58,9 @@ class WorkoutPlanner extends PureComponent{
 	async getExercises() {
 		try {
 			const response = await API.get(`/exercises?userName=${this.props.user.userName}`);
+			response.data.sort((d1, d2) => {
+				return d1.id - d2.id;
+			});
 			this.setState({exerciseRows: response.data.map(d => {
 				return <ExerciseRow key={d.id} id={d.id} edit={this.onEdit} delete={this.delete} name={d.name} max={d.max} isWeighted={d.isWeighted}/>;
 			})});
@@ -116,54 +120,70 @@ class WorkoutPlanner extends PureComponent{
 	}
 
 	render () {
-		return(
-			<Jumbotron fluid>
-				<h1>5/3/1 Workout Planner</h1>
-				<Button onClick={this.handleAddShow}>Add Exercise</Button>
-				<Table>
-					<thead>
-					{this.state.exerciseRows.length > 0 &&
-						<tr>
-						<th>Name</th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						</tr>
-					}
-					</thead>
-					<tbody>{this.state.exerciseRows}</tbody>
-				</Table>
-				<Card>For weighted exercises, workout plan calculated at 10 intervals starting at 10% to 100% of
-				input one rep max, rounded to the nearest multiple of 5.<br/>
-				For unweighted exercises, workout plan calculated at 5 intervals of 20% of max rep count + 2, rounded to the
-				nearest integer. <br/>
-				Regimen based on <a href="https://www.amazon.com/Simplest-Effective-Training-Increase-Strength/dp/0557248299">
-				Jim Wendler's 5/3/1</a>.</Card> 
-				<Modal show={this.state.addingExercise} onHide={this.handleAddClose}>
-					<Modal.Header closeButton>
-						<Modal.Title>Create New Exercise</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						<WorkoutForm save={this.add}/>
-					</Modal.Body>
-				</Modal>
-				<Modal show={this.state.editingExercise} onHide={this.handleEditClose}>
-					<Modal.Header closeButton>
-						<Modal.Title>Edit Exercise</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						<WorkoutForm exercise={this.state.currentExercise} save={this.update}/>
-					</Modal.Body>
-				</Modal>
-			</Jumbotron>
-		);
+		if (!this.props.user) {
+			return (
+				<LoginReminder title="5/3/1 Workout Planner"/>
+			)
+		} else {
+			return (
+				<Jumbotron fluid>
+					<h1>5/3/1 Workout Planner</h1>
+					<Button onClick={this.handleAddShow}>Add Exercise</Button>
+					<Table>
+						<thead>
+						{this.state.exerciseRows.length > 0 &&
+							<tr>
+							<th>Name</th>
+							<th>Set 1</th>
+							<th>Set 2</th>
+							<th>Set 3</th>
+							<th>Set 4</th>
+							<th>Set 5</th>
+							<th>Set 6</th>
+							<th>Set 7</th>
+							<th>Set 8</th>
+							<th>Set 9</th>
+							<th>Set 10</th>
+							</tr>
+						}
+						</thead>
+						<tbody>{this.state.exerciseRows}</tbody>
+					</Table>
+					<Container>
+						<Row>
+							For weighted exercises, workout plan calculated at 10 intervals starting at 10% to 100% of input one rep max, 
+							rounded to the nearest multiple of 5.
+						</Row>
+						<Row>
+							For unweighted exercises, workout plan calculated at 5 intervals of 20% of max rep count + 2, rounded to the
+							nearest integer.
+						</Row>
+						<Row>
+							Regimen based on:
+						</Row>
+						<Row>
+							<a href="https://www.amazon.com/Simplest-Effective-Training-Increase-Strength/dp/0557248299"> Jim Wendler's 5/3/1</a>
+						</Row>
+					</Container>
+					<Modal show={this.state.addingExercise} onHide={this.handleAddClose}>
+						<Modal.Header closeButton>
+							<Modal.Title>Create New Exercise</Modal.Title>
+						</Modal.Header>
+						<Modal.Body>
+							<WorkoutForm save={this.add}/>
+						</Modal.Body>
+					</Modal>
+					<Modal show={this.state.editingExercise} onHide={this.handleEditClose}>
+						<Modal.Header closeButton>
+							<Modal.Title>Edit Exercise</Modal.Title>
+						</Modal.Header>
+						<Modal.Body>
+							<WorkoutForm exercise={this.state.currentExercise} save={this.update}/>
+						</Modal.Body>
+					</Modal>
+				</Jumbotron>
+			);
+		}
 	}
 }
 

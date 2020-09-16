@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import { Button, Col, Container, Row, Modal } from 'react-bootstrap';
+import { Dropdown, Modal } from 'react-bootstrap';
 import AccountForm from './AccountForm';
 
-class LoginButtons extends Component {
+class LoginDropdown extends Component {
 
     constructor(props) {
         super(props);
@@ -43,15 +43,14 @@ class LoginButtons extends Component {
 
     render() {
         return(
-            <Container>
-                <Row>
-                    <Col>
-                        <Button onClick={this.handleSignUpOpen}>Sign Up</Button>
-                    </Col>
-                    <Col>
-                        <Button onClick={this.handleLoginOpen}>Login</Button>
-                    </Col>
-                </Row>
+            <>
+                <Dropdown style={{textAlign: "right"}}>
+                    <Dropdown.Toggle variant="info">Log In</Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={this.handleLoginOpen}>Sign in to Existing Account</Dropdown.Item>
+                        <Dropdown.Item onClick={this.handleSignUpOpen}>Create New Account</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
                 <Modal show={this.state.showModal} onHide={this.handleClose}>
                     <Modal.Header closeButton>
                         {this.state.newAccount && <Modal.Title>Create A New Account</Modal.Title>}
@@ -61,9 +60,9 @@ class LoginButtons extends Component {
                         <AccountForm newAccount={this.state.newAccount} onSubmit={this.handleLogin}/>
                     </Modal.Body>
                 </Modal>
-            </Container>
+            </>
         )
     }
 }
 
-export default LoginButtons;
+export default LoginDropdown;
