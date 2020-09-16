@@ -46,6 +46,7 @@ class MailForm extends Component {
 
 	//create form for submitting email
 	render(){
+		const userEmail = this.props.user ? this.props.user.emailAddress : "";
 		return(
 			<Formik
 				validationSchema={this.schema}
@@ -53,13 +54,14 @@ class MailForm extends Component {
 				validateOnBlur={true}
 				validateOnChange={true}
 				initialValues={{
-					from: "",
+					from: userEmail,
 					subject: "",
 					body: ""
 				}}
 			>
 				{({
 					values,
+					dirty,
 					errors,
 					touched,
 					handleChange,
@@ -73,7 +75,7 @@ class MailForm extends Component {
 							<Form.Control
 								name="from"
 								type="text"
-								value={values.from ? values.from : (this.props.user && this.props.user.emailAddress ? this.props.user.emailAddress : values.from)}
+								value={dirty ? values.from : userEmail}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								isInvalid={touched.from && !!errors.from}
