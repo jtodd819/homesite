@@ -6,6 +6,7 @@ COPY package.json /app/package.json
 RUN npm i --silent
 RUN npm i react-scripts@3.4.3 -g --silent
 COPY . .
+RUN mv ./src/prod-settings.js ./src/settings.js
 RUN npm run build
 
 # Deploy
