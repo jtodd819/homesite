@@ -3,6 +3,8 @@ import { Button, Form } from 'react-bootstrap';
 import  { Formik } from 'formik';
 import * as Yup from 'yup';
 import API from 'api';
+import UserException from 'exceptions';
+import { NotificationManager } from 'react-notifications';
 
 class AccountForm extends Component {
 
@@ -57,18 +59,23 @@ class AccountForm extends Component {
 			if (loginResult.status === 200) {
 				localStorage.setItem('token', loginResult.headers.authorization);
 				const userResponse = await API.get(`/users/${user.userName}`)
+				NotificationManager.success('Your account has been logged in.', 'Logged In', 3000);
 				if (userResponse.status === 200) {
 					user = userResponse.data;
 					delete user.password;
 					this.props.onSubmit(user);
 				} else {
-					throw 'Failed to find logged in user.';
+					throw new UserException('Failed to find your user account details.');
 				}
 			} else {
-				throw 'Failed to login with user credentials.';
+				throw new UserException('Failed to login with your user credentials.');
 			}
 		} catch(err) {
-			console.error(`Failed to save user account: ${err}`);
+			let message = 'Server Error submitting account details.';
+			if (err.name && err.name === 'UserException') {
+				message = err.message;
+			}
+			NotificationManager.error(message, 'Login Error', 5000);
 		}
 	}
 

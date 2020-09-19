@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import LoginDropdown from './LoginDropdown';
 import UserDropdown from './UserDropdown';
+import { NotificationManager } from 'react-notifications';
 
 class UserManagement extends Component {
 
@@ -23,6 +24,7 @@ class UserManagement extends Component {
 	 */
 	handleLogout() {
 		this.props.setUser(null);
+		NotificationManager.success('Your account has been logged out.', 'Logged Out', 3000);
 	}
 
 

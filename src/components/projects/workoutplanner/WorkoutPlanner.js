@@ -1,9 +1,10 @@
-import React, { PureComponent } from "react";
-import { Table, Button, Jumbotron, Modal, Container, Row } from "react-bootstrap";
+import React, { PureComponent } from 'react';
+import { Table, Button, Jumbotron, Modal, Container, Row } from 'react-bootstrap';
 import WorkoutForm from './WorkoutForm';
 import ExerciseRow from './ExerciseRow';
 import API from 'api';
-import LoginReminder from "components/account/LogInReminder";
+import LoginReminder from 'components/account/LogInReminder';
+import { NotificationManager } from 'react-notifications';
 
 //App containing form and workouts table
 class WorkoutPlanner extends PureComponent{
@@ -65,7 +66,7 @@ class WorkoutPlanner extends PureComponent{
 				return <ExerciseRow key={d.id} id={d.id} edit={this.onEdit} delete={this.delete} name={d.name} max={d.max} isWeighted={d.isWeighted}/>;
 			})});
 		} catch (err) {
-			console.error(`Error while fetching exercises: ${err}`)
+			NotificationManager.error(`Server error fetching your exercises.`, 'Get Exercises Error', 3000);
 		}
 	}
 
@@ -86,9 +87,10 @@ class WorkoutPlanner extends PureComponent{
 		try {
 			await API.post('/exercises', {userName: this.props.user.userName, name: exercise.name, max: exercise.max, isWeighted: exercise.isWeighted});
 			this.handleAddClose();
+			NotificationManager.success(`Exercise with name ${exercise.name} has been added.`, 'Exercise Added', 3000);
 			this.getExercises();
 		} catch(err) {
-			console.error(`Error while adding a new exercise with name ${exercise.name}: ${err}`)
+			NotificationManager.error(`Server error creating exercise with name ${exercise.name}.`, 'Exercise Creation Error', 3000);
 		}
 	}
 
@@ -100,9 +102,10 @@ class WorkoutPlanner extends PureComponent{
 		try {
 			await API.put(`/exercises/${exercise.id}`, {name: exercise.name, max: exercise.max, isWeighted: exercise.isWeighted});
 			this.handleEditClose();
+			NotificationManager.success(`Exercise with name ${exercise.name} has been updated.`, 'Exercise Updated', 3000);
 			this.getExercises();
 		} catch (err) {
-			console.error(`Error while updating exercise with name ${exercise.name}: ${err}`)
+			NotificationManager.error(`Server error updating exercise with name ${exercise.name}.`, 'Exercise Update Error', 3000);
 		}
 	}
 
@@ -113,9 +116,10 @@ class WorkoutPlanner extends PureComponent{
 	async delete (exercise) {
 		try {
 			await API.delete(`/exercises/${exercise.id}`);
+			NotificationManager.success(`Exercise with name ${exercise.name} has been been deleted.`, 'Exercise Deleted', 3000);
 			this.getExercises();
 		} catch (err) {
-			console.error(`Error while deleting exercise with name ${exercise.name}: ${err}`)
+			NotificationManager.error(`Server error deleting exercise with name ${exercise.name}.`, 'Exercise Deletion Error', 3000);
 		}
 	}
 

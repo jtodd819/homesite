@@ -4,6 +4,7 @@ import  { Formik } from 'formik';
 import * as Yup from 'yup';
 import '../style/MailForm.css';
 import API from 'api';
+import { NotificationManager } from 'react-notifications';
 
 //Form for Sending Mail to my Address
 class MailForm extends Component {
@@ -39,8 +40,9 @@ class MailForm extends Component {
 	async handleSend (mail) {
 		try {
 			await API.post('/mail', {from: mail.from, subject: mail.subject, body: mail.body});
+			NotificationManager.success(`Mail has been sent with subject: ${mail.subject}.`, 'Mail Sent', 3000);
 		} catch (err) {
-			console.error(`Failed to send mail with subject ${mail.subject} due to error: ${err}`);
+			NotificationManager.error('Server error while sending mail.', 'Mail Failed to Send', 3000);
 		}
 	}
 

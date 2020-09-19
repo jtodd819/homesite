@@ -3,6 +3,8 @@ import Bar from './Bar';
 import Page from './Page';
 import UserManagement from './account/UserManagement';
 import { Container, Row, Col } from 'react-bootstrap';
+import { NotificationContainer } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 class App extends Component {
 
@@ -31,12 +33,13 @@ class App extends Component {
             <Bar />
           </Col>
           <Col>
-           <UserManagement user={this.state.user} setUser={this.setUser}/>
+            <UserManagement user={this.state.user} setUser={this.setUser}/>
           </Col>
         </Row>
         <Row>
           <Page user={this.state.user}/>
         </Row>
+        <NotificationContainer/>
       </Container>
     );
   }
