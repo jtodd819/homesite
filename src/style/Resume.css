@@ -1,0 +1,17 @@
+.title-row {
+    font-weight: bold;
+}
+
+.header-column {
+    text-decoration: underline;
+}
+
+.list-group {
+    width: 100%;
+}
+
+.resume-title {
+    justify-content: center;
+    font-weight: bold;
+    font-size: x-large;
+}

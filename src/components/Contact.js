@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import MailForm from './MailForm';
+import { Container } from 'react-bootstrap';
 
 class Contact extends Component{
 	render(){
 		return(
-			<div>
-				<MailForm />
-			</div>
+			<Container style = {{'backgroundColor': 'rgb(209, 224, 224)', 'padding': '30px 15px 30px 15px'}}>
+				<MailForm user = {this.props.user} />
+			</Container>
 		);
 	}
 }
