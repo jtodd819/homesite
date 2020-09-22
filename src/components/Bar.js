@@ -10,7 +10,7 @@ class Bar extends Component{
 				<Navbar.Brand href="/home">Home</Navbar.Brand>
 				<NavDropdown title="Projects">
 					<NavDropdown.Item href="/projects/workoutplanner">5/3/1 Workout Planner</NavDropdown.Item>
-					<NavDropdown.Item href="https://myrecipes-194614.appspot.com/">My Recipes</NavDropdown.Item>
+					<NavDropdown.Item href="/projects/firecalculator">Financial Independence Calculator</NavDropdown.Item>
 				</NavDropdown>
 				<Nav.Link href="/contact"><i className='fa fa-envelope-square icon'/></Nav.Link>
 				<Nav.Link href="https://linkedin.com/in/james-todd-827069144"><i className='fa fa-linkedin-square icon'/></Nav.Link>
