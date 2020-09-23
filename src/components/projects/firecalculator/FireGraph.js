@@ -4,20 +4,19 @@ import { Line } from 'react-chartjs-2';
 class FireGraph extends Component {
     render() {
         // Calculate data points based on fire number and years to fire
-        const yearLabels = [];
-        const valuesAtYear = [];
+        const dataLabels = [];
+        const dataValues = [];
         for (let i = 0; i < parseInt(this.props.yearsUntilFire, 10); i++) {
-           yearLabels.push(i + '');
-           valuesAtYear.push((i / this.props.yearsUntilFire) * this.props.fireNumber);
+            dataLabels.push(i + '');
+            dataValues.push((i / this.props.yearsUntilFire) * this.props.fireNumber);
         }
-        yearLabels.push(this.props.yearsUntilFire);
-        valuesAtYear.push(this.props.fireNumber);
-
-        var chartData = {
-            labels: yearLabels,
+        dataLabels.push(this.props.yearsUntilFire + '');
+        dataValues.push(this.props.fireNumber);
+        const chartData = {
+            labels: dataLabels,
             datasets: [
                 {
-                    label: 'Years Until Financial Independence',
+                    label: 'Net Worth at Year',
                     fill: false,
                     lineTension: 0.1,
                     backgroundColor: 'rgba(75,192,192,0.4)',
@@ -35,16 +34,45 @@ class FireGraph extends Component {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: valuesAtYear
+                    data: dataValues
                 }
             ]
         };
+        const chartOptions = {
+            scales: {
+                xAxes: [
+                    {
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Year'
+                        },
+                        id: 'Year',
+                        position: 'bottom',
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    },
+                ],
+                yAxes: [
+                    {
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Net Worth ($)'
+                        },
+                        postion: 'left',
+                        id: 'Net Worth',
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    },
+                ]
+            }
+        }
         return (
             <div>
-                <h1>Financial Independence Graph</h1>
-                <h2>My Financial Independence Number: ${this.props.fireNumber}</h2>
-                <h2>Years Until Financial Indpendence</h2>
-                <Line data={chartData}/>
+                <h4>My Financial Independence Number is ${this.props.fireNumber}</h4>
+                <h4>{this.props.yearsUntilFire} Years Until Financial Independence</h4>
+                <Line data={chartData} options={chartOptions}/>
             </div>
         )
     }

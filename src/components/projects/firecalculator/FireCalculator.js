@@ -1,33 +1,53 @@
 import React, { Component } from 'react';
 import FireForm from './FireForm';
 import FireGraph from './FireGraph';
-import { Container, Row } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 
 class FireCalculator extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { fireNumber: null, yearsUntilFire: null};
+        this.state = {fireNumber: 0, yearsUntilFire: 0};
         this.calculateFire = this.calculateFire.bind(this);
     }
 
     calculateFire(values) {
-        const fireNumber = values['afterExpenses'] * 25 * (values['period'] === 'month' ? 12 : 1);
-        const savingsRate = values['investmentPer'] / values['netIncome'];
-        const compoundingRate = values['annualReturnRate'] / 100;
-        let yearsUntilFire = Math.log(((fireNumber - values['assets']) * compoundingRate / savingsRate) + 1) / Math.log(1 + compoundingRate);
-        yearsUntilFire = yearsUntilFire < 0 ? yearsUntilFire : 0;
-        this.setState({yearsUntilFire: yearsUntilFire, fireNumber: fireNumber});
+        const yearlyExpenses = values['afterExpenses'] * (values['period'] === 'month' ? 12 : 1);
+        const fireNumber = yearlyExpenses * 25;
+        const marketReturnRate = (values['annualReturnRate'] - values['annualInflationRate']) / 100;
+        const annnualSavingsRate = values['investmentPer']  / values['netIncome'];
+        const yearlyIncome = values['netIncome'] * (values['period'] === 'month' ? 12  : 1);
+        const annualWithdrawalRate = values['annualWithdrawalRate'] / 100;
+        const netWorth = values['assets'];
+        const divisorDivisor = (yearlyIncome * ((marketReturnRate * -Math.abs(annnualSavingsRate)) + marketReturnRate + (annnualSavingsRate * annualWithdrawalRate)));
+        const divisorDividend = annualWithdrawalRate * ((yearlyIncome * annnualSavingsRate) + (netWorth * marketReturnRate));
+        const yearEquationDivisor = Math.log(divisorDivisor / divisorDividend);
+        const yearEquationDividend =  Math.log(marketReturnRate + 1);
+        let yearsUntilFire = yearEquationDivisor / yearEquationDividend;
+        yearsUntilFire = Math.round(yearsUntilFire * 10) / 10;
+        this.setState({yearsUntilFire: yearsUntilFire, fireNumber: fireNumber, showGraph: true});
     }
 
     render() {
         return (
-            <Container fluid>
+            <Container>
+                <h1>Financial Independence Calculator</h1>
                 <Row>
-                    <FireForm onSubmit={this.calculateFire}/>
-                </Row>
-                <Row>
-                {this.state.fireNumber && this.state.timeToFire && <FireGraph fireNumber={this.state.fireNumber} timeToFire={this.state.timeToFire}/>}
+                    <Col>
+                        <FireForm onSubmit={this.calculateFire}/>
+                    </Col>
+                    <Col style={{'marginTop': '40px', 'marginBottom': '40px'}}>
+                        <Row>
+                            <FireGraph fireNumber={this.state.fireNumber} yearsUntilFire={this.state.yearsUntilFire}/>
+                        </Row>
+                        <Row >
+                            <Card border='info' text='dark' className='mb-2'>
+                                <a style={{color: 'blue'}} href="https://en.wikipedia.org/wiki/Financial_independence">What is Financial Independence?</a>
+                                Financial Independence number is calculated from expected yearly expenses multiplied by 25.<br/>
+                                This information is private and not saved or sent anywhere.
+                            </Card>
+                        </Row>
+                    </Col>
                 </Row>
             </Container>
         )

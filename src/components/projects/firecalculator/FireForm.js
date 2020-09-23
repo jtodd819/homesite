@@ -15,32 +15,26 @@ class FireForm extends Component {
 	 */
 	getFormSchema() {
 		return Yup.object().shape({
-			period: Yup.string().required('Please choose a period to use for entering values.').default('month'),
+			period: Yup.string().required('Please choose a period to use for entering values.'),
             netIncome: Yup.number()
-                .default(0)
-                .required(`Please enter your net income per ${this.parent.period}.`)
+                .required('Please enter your net income.')
 				.min(0, 'Please enter a non-negative value for your net income.'),
             assets: Yup.number()
-                .default(0)
-                .required(`Please enter your current assets.`),
+                .required('Please enter your current assets.'),
             afterExpenses: Yup.number()
-                .default(0)
-                .required(`Please enter your expected expenses per ${this.parent.period} after independence.`)
-				.min(0, `Please enter a non-negative value for your expected expenses per ${this.parent.period} after independence.`),
+                .required('Please enter your expected expense after independence.')
+				.min(0, 'Please enter a non-negative value for your expected expenses after independence.'),
             investmentPer: Yup.number()
-                .default(0)
-                .required(`Please enter your investment per ${this.parent.period}.`)
-                .min(0, `Please enter a non-negative value for your investment per ${this.parent.period}.`),
+				.required('Please enter your investment.')
+				.lessThan(Yup.ref('netIncome'), 'Nice try. You cannot invest more than you make.')
+                .min(0, 'Please enter a non-negative value for your investment.'),
             annualReturnRate: Yup.number()
-                .default(10)
                 .required('Please enter your expected annual return rate percentage.')
                 .min(0, 'Please enter a non-negative value for your expected annual return rate percentage.'),
             annualInflationRate: Yup.number()
-                .default(2)
                 .required('Please enter the expected annual inflation rate percentage.')
                 .min(0, 'Please enter a non-negative value for the expected annual inflation rate percentage.'),
             annualWithdrawalRate: Yup.number()
-                .default(4)
                 .required('Please enter your expected annual withdrawal rate percentage.')
                 .min(0, 'Please enter a non-negative value for your expected annual withdrawal rate percentage.')
 		});
@@ -53,6 +47,16 @@ class FireForm extends Component {
 				onSubmit={this.props.onSubmit}
 				validateOnBlur={true}
 				validateOnChange={true}
+				initialValues={{
+					period: 'month',
+					netIncome: 0,
+					assets:0,
+					afterExpenses: 0,
+					investmentPer: 0,
+					annualReturnRate: 10,
+					annualInflationRate: 2,
+					annualWithdrawalRate:4
+				}}
 			>
 				{({
 					values,
@@ -66,15 +70,17 @@ class FireForm extends Component {
 					<Form noValidate onSubmit={handleSubmit}>
 						<Form.Group controlId="validationFormikPeriod">
 							<Form.Label>Which time period would you like to input values for?</Form.Label>
-							<Form.Check
-								checked={values.period === 'month'}
-								type="radio"
-								label="month"/>
-							<Form.Check
-								checked={values.period === 'year'}
-								type="radio"
-								label="year"/>
-							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
+							<Form.Control
+								name="period"
+								as="select"
+								value={values.period}
+								onChange={handleChange}
+								onBlur={handleBlur}
+								isInvalid={touched.period && !!errors.period}
+								isValid={touched.period && !errors.period}>
+							<option value="month">Month</option>
+							<option value="year">Year</option>
+							</Form.Control>
 							<Form.Control.Feedback type="invalid">{errors.from}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group controlId="validationFormikNetIncome">
@@ -87,7 +93,6 @@ class FireForm extends Component {
 								onBlur={handleBlur}
 								isInvalid={touched.netIncome && !!errors.netIncome}
 								isValid={touched.netIncome && !errors.netIncome}/>
-							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">{errors.netIncome}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group controlId="validationFormikAfterExpenses">
@@ -100,7 +105,6 @@ class FireForm extends Component {
 								onBlur={handleBlur}
 								isInvalid={touched.afterExpenses && !!errors.afterExpenses}
 								isValid={touched.afterExpenses && !errors.afterExpenses}/>
-							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">{errors.afterExpenses}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group controlId="validationFormikInvestmentPer">
@@ -113,7 +117,6 @@ class FireForm extends Component {
 								onBlur={handleBlur}
 								isInvalid={touched.investmentPer && !!errors.investmentPer}
 								isValid={touched.investmentPer && !errors.investmentPer}/>
-							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">{errors.investmentPer}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group controlId="validationFormikAssets">
@@ -126,7 +129,6 @@ class FireForm extends Component {
 								onBlur={handleBlur}
 								isInvalid={touched.assets && !!errors.assets}
 								isValid={touched.assets && !errors.assets}/>
-							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">{errors.assets}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group controlId="validationFormikAnnualWithdrawalRate">
@@ -139,7 +141,6 @@ class FireForm extends Component {
 								onBlur={handleBlur}
 								isInvalid={touched.annualWithdrawalRate && !!errors.annualWithdrawalRate}
 								isValid={touched.annualWithdrawalRate && !errors.annualWithdrawalRate}/>
-							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">{errors.annualWithdrawalRate}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group controlId="validationFormikAnnualInflationRate">
@@ -152,7 +153,6 @@ class FireForm extends Component {
 								onBlur={handleBlur}
 								isInvalid={touched.annualInflationRate && !!errors.annualInflationRate}
 								isValid={touched.annualInflationRate && !errors.annualInflationRate}/>
-							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">{errors.annualInflationRate}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group controlId="validationFormikAnnualReturnRate">
@@ -165,10 +165,9 @@ class FireForm extends Component {
 								onBlur={handleBlur}
 								isInvalid={touched.annualReturnRate && !!errors.annualReturnRate}
 								isValid={touched.annualReturnRate && !errors.annualReturnRate}/>
-							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">{errors.annualReturnRate}</Form.Control.Feedback>
 						</Form.Group>
-						<Button type="submit">Calculate My Independence</Button>
+						<Button type="submit">Calculate</Button>
 					</Form>
 				)}
 			</Formik>
