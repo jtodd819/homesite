@@ -108,7 +108,7 @@ class Resume extends Component{
 							Java Spring Boot Rest API Server connected to PostgreSQL Database
 						</ListGroup.Item>
 						<ListGroup.Item>
-							Projects on Site: Workout Planner, My Recipes, Small Shell
+							Projects on Site: Workout Planner, Financial Independence Calculator
 						</ListGroup.Item>
 					</ListGroup>
 				</Row>
