@@ -21,9 +21,6 @@ class FireForm extends Component {
 				.min(0, 'Please enter a non-negative value for your net income.'),
             assets: Yup.number()
                 .required('Please enter your current assets.'),
-            afterExpenses: Yup.number()
-                .required('Please enter your expected expense after independence.')
-				.min(0, 'Please enter a non-negative value for your expected expenses after independence.'),
             investmentPer: Yup.number()
 				.required('Please enter your investment.')
 				.lessThan(Yup.ref('netIncome'), 'Nice try. You cannot invest more than you make.')
@@ -48,10 +45,9 @@ class FireForm extends Component {
 				validateOnBlur={true}
 				validateOnChange={true}
 				initialValues={{
-					period: 'month',
+					period: 'year',
 					netIncome: 0,
 					assets:0,
-					afterExpenses: 0,
 					investmentPer: 0,
 					annualReturnRate: 10,
 					annualInflationRate: 2,
@@ -95,18 +91,6 @@ class FireForm extends Component {
 								isValid={touched.netIncome && !errors.netIncome}/>
 							<Form.Control.Feedback type="invalid">{errors.netIncome}</Form.Control.Feedback>
 						</Form.Group>
-						<Form.Group controlId="validationFormikAfterExpenses">
-							<Form.Label>What are your expected expenses after independence per {values.period}?</Form.Label>
-							<Form.Control
-								name="afterExpenses"
-								type="number"
-								value={values.afterExpenses}
-								onChange={handleChange}
-								onBlur={handleBlur}
-								isInvalid={touched.afterExpenses && !!errors.afterExpenses}
-								isValid={touched.afterExpenses && !errors.afterExpenses}/>
-							<Form.Control.Feedback type="invalid">{errors.afterExpenses}</Form.Control.Feedback>
-						</Form.Group>
 						<Form.Group controlId="validationFormikInvestmentPer">
 							<Form.Label>How much will you invest per {values.period}?</Form.Label>
 							<Form.Control
@@ -144,7 +128,7 @@ class FireForm extends Component {
 							<Form.Control.Feedback type="invalid">{errors.annualWithdrawalRate}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group controlId="validationFormikAnnualInflationRate">
-							<Form.Label>What do you expect the inflation rate percentage will be per year?</Form.Label>
+							<Form.Label>What do you expect the inflation rate percentage is per year?</Form.Label>
 							<Form.Control
 								name="annualInflationRate"
 								type="number"
@@ -156,7 +140,7 @@ class FireForm extends Component {
 							<Form.Control.Feedback type="invalid">{errors.annualInflationRate}</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group controlId="validationFormikAnnualReturnRate">
-							<Form.Label>What is your expected perecent return rate per year on your assets?</Form.Label>
+							<Form.Label>What is your expected percent return rate per year on your assets?</Form.Label>
 							<Form.Control
 								name="annualReturnRate"
 								type="number"
