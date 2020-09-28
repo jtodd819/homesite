@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
 
 class FireGraph extends Component {
+    
     render() {
         // Calculate data points based on fire number and years to fire
         const dataLabels = [];
-        const dataValues = [];
-        for (let i = 0; i < parseInt(this.props.yearsUntilFire, 10); i++) {
+        for (let i = 0; i < parseInt(this.props.yearsUntilFire, 10) + 1; i++) {
             dataLabels.push(i + '');
-            dataValues.push((i / this.props.yearsUntilFire) * this.props.fireNumber);
         }
         dataLabels.push(this.props.yearsUntilFire + '');
-        dataValues.push(this.props.fireNumber);
         const chartData = {
             labels: dataLabels,
             datasets: [
@@ -34,7 +32,7 @@ class FireGraph extends Component {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: dataValues
+                    data: this.props.netWorths
                 }
             ]
         };
