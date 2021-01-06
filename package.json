@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "http://james-todd.net",
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "body-parser": "^1.18.2",
     "bootstrap": "^3.4.1",
     "chart.js": "^2.9.3",
