@@ -20,6 +20,30 @@ class Resume extends Component{
 				</Row>
 				<Row>
 					<Col className="header-column">
+						Box Inc.
+					</Col>
+					<Col className="header-column">
+						Software Engineer
+					</Col>
+					<Col className="header-column">
+						January 2021 -- Present
+					</Col>
+				</Row>
+				<Row>
+					<ListGroup variant="flush">
+						<ListGroup.Item>
+							Built File Request Dashboard experience for administrators to manage File Requests of users within their enterprise.
+						</ListGroup.Item>
+						<ListGroup.Item>
+							Developed Scheduled Trigger workflow feature to automatically execute user defined automations on defined schedules.
+						</ListGroup.Item>
+						<ListGroup.Item>
+							Enhanced Box Workflow feature packaging by refactoring services to accept configuration driven sets of available features for each user.
+						</ListGroup.Item>
+					</ListGroup>
+				</Row>
+				<Row>
+					<Col className="header-column">
 						Antage Inc.
 					</Col>
 					<Col className="header-column">
@@ -42,30 +66,6 @@ class Resume extends Component{
 						<ListGroup.Item>
 							Enhanced process for users to submit data by implementing a state management system which allowed the user to manage their data 
 							at multiple stages in the submission process before the data was saved to our system.
-						</ListGroup.Item>
-					</ListGroup>
-				</Row>
-				<Row>
-					<Col className="header-column">
-						Box Inc.
-					</Col>
-					<Col className="header-column">
-						Software Engineer
-					</Col>
-					<Col className="header-column">
-						January 2021 -- Present
-					</Col>
-				</Row>
-				<Row>
-					<ListGroup variant="flush">
-						<ListGroup.Item>
-							Built File Request Dashboard experience for administrators to manage File Requests of users within their enterprise.
-						</ListGroup.Item>
-						<ListGroup.Item>
-							Developed Scheduled Trigger workflow feature to automatically execute user defined automations on defined schedules.
-						</ListGroup.Item>
-						<ListGroup.Item>
-							Enhanced Box Workflow feature packaging by refactoring services to accept configuration driven sets of available features for each user.
 						</ListGroup.Item>
 					</ListGroup>
 				</Row>
