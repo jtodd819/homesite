@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import  { Formik } from 'formik';
 import * as Yup from 'yup';
-import API from 'api';
-import UserException from 'exceptions';
+import API from '../../api';
+import UserException from '../../exceptions';
 import { NotificationManager } from 'react-notifications';
 
 class AccountForm extends Component {

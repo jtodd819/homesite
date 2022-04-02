@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SERVER_URI } from 'settings';
+import { SERVER_URI } from './settings';
 
 const apiOptions = {
     baseURL: SERVER_URI

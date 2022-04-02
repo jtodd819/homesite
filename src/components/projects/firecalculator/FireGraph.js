@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS } from 'chart.js/auto';
 
 class FireGraph extends Component {
     
@@ -38,32 +39,30 @@ class FireGraph extends Component {
         };
         const chartOptions = {
             scales: {
-                xAxes: [
-                    {
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Year'
-                        },
-                        id: 'Year',
-                        position: 'bottom',
-                        ticks: {
-                            beginAtZero: true
-                        }
+                x: 
+                {
+                    title: {
+                        display: true,
+                        text: 'Year'
                     },
-                ],
-                yAxes: [
-                    {
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Net Worth ($)'
-                        },
-                        postion: 'left',
-                        id: 'Net Worth',
-                        ticks: {
-                            beginAtZero: true
-                        }
+                    id: 'Year',
+                    position: 'bottom',
+                    ticks: {
+                        beginAtZero: true
+                    }
+                },
+                y:
+                {
+                    title: {
+                        display: true,
+                        text: 'Net Worth ($)'
                     },
-                ]
+                    postion: 'left',
+                    id: 'Net Worth',
+                    ticks: {
+                        beginAtZero: true
+                    }
+                },
             }
         }
         return (

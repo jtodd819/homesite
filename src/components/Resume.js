@@ -26,7 +26,7 @@ class Resume extends Component{
 						Software Engineer
 					</Col>
 					<Col className="header-column">
-						April 2018 -- Present
+						April 2018 -- January 2021
 					</Col>
 				</Row>
 				<Row>
@@ -40,12 +40,32 @@ class Resume extends Component{
 							user data by building a RESTful HTTP API for communicating with AMQP services across the enterprise.
 						</ListGroup.Item>
 						<ListGroup.Item>
-							Built standard process for users to gather and submit construction data 
-							through the website by developing a configuration driven, reusable survey submission UI.
-						</ListGroup.Item>
-						<ListGroup.Item>
 							Enhanced process for users to submit data by implementing a state management system which allowed the user to manage their data 
 							at multiple stages in the submission process before the data was saved to our system.
+						</ListGroup.Item>
+					</ListGroup>
+				</Row>
+				<Row>
+					<Col className="header-column">
+						Box Inc.
+					</Col>
+					<Col className="header-column">
+						Software Engineer
+					</Col>
+					<Col className="header-column">
+						January 2021 -- Present
+					</Col>
+				</Row>
+				<Row>
+					<ListGroup variant="flush">
+						<ListGroup.Item>
+							Built File Request Dashboard experience for administrators to manage File Requests of users within their enterprise.
+						</ListGroup.Item>
+						<ListGroup.Item>
+							Developed Scheduled Trigger workflow feature to automatically execute user defined automations on defined schedules.
+						</ListGroup.Item>
+						<ListGroup.Item>
+							Enhanced Box Workflow feature packaging by refactoring services to accept configuration driven sets of available features for each user.
 						</ListGroup.Item>
 					</ListGroup>
 				</Row>
@@ -66,13 +86,13 @@ class Resume extends Component{
 				<Row>
 					<ListGroup variant="flush"> 
 						<ListGroup.Item>
-							B.S. in Computer Science, 4.0 GPA
+							B.S. in Computer Science, 4.0 GPA, Graduated 2018
 						</ListGroup.Item>
 					</ListGroup>
 				</Row>
 				<Row>
 					<Col className="header-column">
-						University of North Carolina
+						University of North Carolina, Graduated 2016
 					</Col>
 					<Col className="header-column">
 						Chapel Hill, NC
@@ -89,23 +109,20 @@ class Resume extends Component{
 					</ListGroup>
 				</Row>
 				<Row className="title-row">
-					Technical Experience
-				</Row>
-				<Row>
-					<Col className="header-column">
-						Personal Website
-					</Col>
-					<Col className="header-column">
-						<a href={this.state.website}>{this.state.website}</a>
-					</Col>
+					Personal Projects	
 				</Row>
 				<Row>
 					<ListGroup variant="flush">
 						<ListGroup.Item>
-							Single Page ReactJS Web App	
-						</ListGroup.Item>
-						<ListGroup.Item>
-							Java Spring Boot Rest API Server connected to PostgreSQL Database
+							<a href={this.state.website}>{this.state.website}</a>
+							<ListGroup variant="flush">
+								<ListGroup.Item>
+									Single Page ReactJS Web App
+								</ListGroup.Item>
+								<ListGroup.Item>
+									Java SpringBoot Rest API connected to PostgreSQL Database
+								</ListGroup.Item>
+							</ListGroup>
 						</ListGroup.Item>
 						<ListGroup.Item>
 							Projects on Site: Workout Planner, Financial Independence Calculator
@@ -118,10 +135,7 @@ class Resume extends Component{
 				<Row>
 					<ListGroup variant="flush">
 						<ListGroup.Item>
-							<em>Proficient</em>: JavaScript, Python, HTML, CSS, MongoDB
-						</ListGroup.Item>
-						<ListGroup.Item>
-							<em>Hobbyist</em>: Java, PostgreSQL
+							JavaScript, Python, Java, SQL, MongoDB, HTML, CSS
 						</ListGroup.Item>
 					</ListGroup>
 				</Row>
