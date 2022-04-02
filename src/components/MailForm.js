@@ -3,7 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import  { Formik } from 'formik';
 import * as Yup from 'yup';
 import '../style/MailForm.css';
-import API from 'api';
+import API from '../api';
 import { NotificationManager } from 'react-notifications';
 
 //Form for Sending Mail to my Address

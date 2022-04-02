@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
 import Home from './Home';
 import Resume from './Resume';
 import Contact from './Contact';
@@ -14,19 +14,15 @@ class Page extends Component{
 	render(){
 		return(
 			<BrowserRouter>
-				<Switch>
-						<Route exact path='/' component={Home}/>
-						<Redirect from='/home' to='/'/>
-						<Route exact path='/projects/workoutplanner'>
-							<WorkoutPlanner user={this.props.user}/>
-						</Route>
-						<Route exact path='/projects/firecalculator' component={FireCalculator}/>
-						<Route exact path='/resume' component={Resume}/>
-						<Route exact path='/contact' component={Contact}>
-							<Contact user={this.props.user}/>
-						</Route>
-						<Route path='/' component={BadPath}/>
-				</Switch>
+				<Routes>
+						<Route exact path='/' element={<Home/>}/>
+						<Route path="/home" element={<Navigate replace to = '/' />}/>
+						<Route exact path='/projects/workoutplanner' element={<WorkoutPlanner user={this.props.user}/>}/>
+						<Route exact path='/projects/firecalculator' element={<FireCalculator/>}/>
+						<Route exact path='/resume' element={<Resume/>}/>
+						<Route exact path='/contact' element={<Contact user={this.props.user}/>}/>
+						<Route path='/' element={<BadPath/>}/>
+				</Routes>
 			</BrowserRouter>
 		);
 	}

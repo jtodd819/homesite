@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import { Table, Button, Jumbotron, Modal, Container, Row } from 'react-bootstrap';
 import WorkoutForm from './WorkoutForm';
 import ExerciseRow from './ExerciseRow';
-import API from 'api';
-import LoginReminder from 'components/account/LogInReminder';
+import API from '../../../api';
+import LoginReminder from '../../account/LogInReminder';
 import { NotificationManager } from 'react-notifications';
 
 //App containing form and workouts table
